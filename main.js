@@ -30,27 +30,27 @@ if (reduce) {
     .from(".nav", { y: -40, opacity: 0, duration: 1 })
     .from(".hero-title .line > span", { yPercent: 110, duration: 1.3, stagger: 0.12 }, "-=0.7")
     .from(".hero .reveal", { y: 24, opacity: 0, duration: 1, stagger: 0.1 }, "-=0.9")
-    .from(".phone", { y: 160, rotateX: 25, opacity: 0, duration: 1.6 }, "-=0.9")
+    .from(".phone", { y: 80, opacity: 0, duration: 1.6 }, "-=0.9")
     .to(".ring-fg", { strokeDashoffset: 528 * (1 - 1480 / 2100), duration: 2, ease: "power3.inOut" }, "-=0.8")
     .add(countUp(document.querySelector(".kcal"), 2), "<")
     .from(".bar i", { scaleX: 0, duration: 1.2, stagger: 0.12, ease: "power3.out" }, "<0.3")
     .from(".meal", { y: 20, opacity: 0, duration: 0.8 }, "<0.4")
-    .from(".float", { scale: 0.6, opacity: 0, duration: 1, stagger: 0.15, ease: "back.out(1.7)" }, "<");
+    .from(".float", { y: 10, opacity: 0, duration: 1, stagger: 0.15, ease: "power3.out" }, "<");
 
   // Floating chips bob
-  gsap.to(".f1", { y: -14, duration: 2.4, repeat: -1, yoyo: true, ease: "sine.inOut" });
-  gsap.to(".f2", { y: 14, duration: 2.8, repeat: -1, yoyo: true, ease: "sine.inOut" });
+  gsap.to(".f1", { y: -6, duration: 4, repeat: -1, yoyo: true, ease: "sine.inOut" });
+  gsap.to(".f2", { y: 6, duration: 4.5, repeat: -1, yoyo: true, ease: "sine.inOut" });
 
   // Phone tilts away on scroll
   gsap.to(".phone", {
-    rotateX: 12, scale: 0.92, y: 60,
+    scale: 0.96, y: 30,
     scrollTrigger: { trigger: ".phone-wrap", start: "top 30%", end: "bottom top", scrub: true },
   });
 
   // Blobs drift with scroll
-  gsap.to(".b1", { x: "20vw", y: "30vh", scrollTrigger: { scrub: 1 } });
-  gsap.to(".b2", { x: "-25vw", y: "40vh", scrollTrigger: { scrub: 1 } });
-  gsap.to(".b3", { x: "-10vw", y: "-50vh", scrollTrigger: { scrub: 1 } });
+  gsap.to(".b1", { x: "8vw", y: "12vh", scrollTrigger: { scrub: 1 } });
+  gsap.to(".b2", { x: "-8vw", y: "14vh", scrollTrigger: { scrub: 1 } });
+  gsap.to(".b3", { x: "-4vw", y: "-16vh", scrollTrigger: { scrub: 1 } });
 
   // Statement: word-by-word light-up
   const big = document.querySelector(".big-text");
@@ -88,8 +88,8 @@ if (reduce) {
       },
     });
     scan
-      .from(".plate", { scale: 0.7, rotate: -30, opacity: 0, duration: 1 })
-      .from(".food", { scale: 0, stagger: 0.15, duration: 0.6, ease: "back.out(2)" }, "<0.3")
+      .from(".plate", { scale: 0.9, opacity: 0, duration: 1 })
+      .from(".food", { opacity: 0, y: 10, stagger: 0.15, duration: 0.6, ease: "power3.out" }, "<0.3")
       .to(".scanline", { opacity: 1, duration: 0.1 })
       .to(".scanline", { top: "100%", duration: 1.2, ease: "none" })
       .to(".scanline", { top: "0%", duration: 1.2, ease: "none" })
@@ -110,7 +110,7 @@ if (reduce) {
   });
 
   gsap.from(".card", {
-    y: 80, opacity: 0, duration: 1.1, stagger: 0.1, ease: "expo.out",
+    y: 40, opacity: 0, duration: 1.1, stagger: 0.1, ease: "expo.out",
     scrollTrigger: { trigger: ".grid", start: "top 80%" },
   });
   ScrollTrigger.create({
@@ -124,22 +124,11 @@ if (reduce) {
   });
 
   gsap.from(".final-card", {
-    scale: 0.88, opacity: 0, duration: 1.2, ease: "expo.out",
+    y: 40, opacity: 0, duration: 1.2, ease: "expo.out",
     scrollTrigger: { trigger: ".final", start: "top 80%" },
   });
   gsap.from(".final-title", {
     backgroundPosition: "0% 0%", y: 50, opacity: 0, duration: 1.2, ease: "expo.out",
     scrollTrigger: { trigger: ".final", start: "top 70%" },
-  });
-
-  // Glass cards: light follows the pointer
-  document.querySelectorAll(".card, .plan").forEach(card => {
-    card.addEventListener("pointermove", e => {
-      const r = card.getBoundingClientRect();
-      const x = (e.clientX - r.left) / r.width - 0.5;
-      const y = (e.clientY - r.top) / r.height - 0.5;
-      gsap.to(card, { rotateY: x * 6, rotateX: -y * 6, transformPerspective: 900, duration: 0.5, ease: "power2.out" });
-    });
-    card.addEventListener("pointerleave", () => gsap.to(card, { rotateY: 0, rotateX: 0, duration: 0.8, ease: "elastic.out(1, 0.5)" }));
   });
 }
