@@ -1,211 +1,145 @@
-/* DJUPT — animations. GSAP 3 + ScrollTrigger. Respects prefers-reduced-motion. */
-(() => {
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const $ = (s, el = document) => el.querySelector(s);
-  const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+gsap.registerPlugin(ScrollTrigger);
 
-  /* ---------- Cart buttons (works without GSAP too) ---------- */
-  const cart = $('.cart');
-  let count = 0;
-  $$('.add').forEach(btn => btn.addEventListener('click', () => {
-    count += 1;
-    cart.textContent = count;
-    btn.textContent = 'Tillagd ✓';
-    btn.classList.add('is-added');
-    if (window.gsap && !reduce) gsap.fromTo(cart, { scale: 1.6 }, { scale: 1, duration: .5, ease: 'back.out(3)' });
-  }));
+const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  if (!window.gsap || reduce) {
-    $$('.stat__n').forEach(n => { n.textContent = Number(n.dataset.count).toLocaleString('sv-SE'); });
-    return;
-  }
-  gsap.registerPlugin(ScrollTrigger);
+// Liquid refraction only where backdrop SVG filters work (Chromium)
+if (/Chrome/.test(navigator.userAgent) && !/Edg|OPR/.test(navigator.userAgent)) {
+  document.querySelectorAll(".nav, .float, .tag, .result").forEach(el => el.classList.add("liquid"));
+}
 
-  /* ---------- Split headings into words/characters ---------- */
-  $$('.split').forEach(h => {
-    const walk = node => {
-      [...node.childNodes].forEach(n => {
-        if (n.nodeType === 3) {
-          const frag = document.createDocumentFragment();
-          n.textContent.split(/(\s+)/).forEach(part => {
-            if (!part) return;
-            if (/^\s+$/.test(part)) { frag.append(' '); return; }
-            const wd = document.createElement('span'); wd.className = 'wd';
-            [...part].forEach(c => { const ch = document.createElement('span'); ch.className = 'ch'; ch.textContent = c; wd.append(ch); });
-            frag.append(wd);
-          });
-          n.replaceWith(frag);
-        } else if (n.nodeType === 1) walk(n);
-      });
-    };
-    walk(h);
-    gsap.from($$('.ch', h), {
-      yPercent: 110, rotate: 6, duration: .9, ease: 'power4.out', stagger: .018,
-      scrollTrigger: { trigger: h, start: 'top 85%' }
-    });
-  });
-
-  /* ---------- Cursor ---------- */
-  const cursor = $('.cursor');
-  if (matchMedia('(hover: hover)').matches) {
-    const xTo = gsap.quickTo(cursor, 'x', { duration: .35, ease: 'power3' });
-    const yTo = gsap.quickTo(cursor, 'y', { duration: .35, ease: 'power3' });
-    window.addEventListener('pointermove', e => { gsap.set(cursor, { opacity: 1 }); xTo(e.clientX); yTo(e.clientY); });
-    $$('a, button, .rod-card, .lure').forEach(el => {
-      el.addEventListener('pointerenter', () => cursor.classList.add('is-big'));
-      el.addEventListener('pointerleave', () => cursor.classList.remove('is-big'));
-    });
-  }
-
-  /* ---------- Hero intro ---------- */
-  const line = $('.hero__line');
-  const lineLen = line.getTotalLength();
-  gsap.set(line, { strokeDasharray: lineLen, strokeDashoffset: lineLen });
-  const bob = '.hero__bob';                                          // float + intro drop
-  const bobInner = ['.hero__bobber', '.hero__leader', '.hero__hooklure']; // nibbles
-
-  const intro = gsap.timeline({ defaults: { ease: 'power4.out' } });
-  intro
-    .from('.nav', { y: -90, duration: 1 })
-    .from('.hero__title .word', { yPercent: 115, duration: 1.1, stagger: .12 }, '<.1')
-    .from('.hero__sun', { attr: { cy: 620 }, duration: 1.8, ease: 'power2.out' }, '<')
-    .from('.hero__glow', { opacity: 0, duration: 2 }, '<')
-    .from('.hero__rod', { rotate: 14, transformOrigin: '0% 100%', opacity: 0, duration: 1.4 }, '<.2')
-    .to(line, { strokeDashoffset: 0, duration: 1, ease: 'power2.inOut' }, '-=.6')
-    .from(bob, { y: -260, opacity: 0, duration: .9, ease: 'bounce.out' }, '-=.3')
-    .from('.hero__lead, .hero__ctas, .hero__scroll', { y: 30, opacity: 0, duration: .8, stagger: .1 }, '-=.6');
-
-  // Bobber floats, ripples spread, now and then a nibble
-  gsap.to(bob, { y: 6, duration: 1.6, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 4 });
-  $$('.hero__ripples ellipse').forEach((el, i) => {
-    gsap.fromTo(el, { attr: { rx: 20, ry: 4 }, opacity: .8 },
-      { attr: { rx: 120, ry: 18 }, opacity: 0, duration: 3.6, ease: 'power1.out', repeat: -1, delay: 2.8 + i * 1.2 });
-  });
-  const nibble = gsap.timeline({ repeat: -1, repeatDelay: 4, delay: 6 })
-    .to(bobInner, { y: 22, duration: .14, ease: 'power2.in' })
-    .to(bobInner, { y: 0, duration: .5, ease: 'elastic.out(1.2, .4)' })
-    .to('.hero__rod', { rotate: 1.4, transformOrigin: '0% 100%', duration: .14, yoyo: true, repeat: 1 }, 0);
-
-  // Waves drift, the fish patrols, stars twinkle softly (no flashing)
-  gsap.to('.hero__waves', { x: -120, duration: 6, ease: 'none', repeat: -1 });
-  gsap.set('.hero__fish', { x: 1500, y: 660 });
-  gsap.to('.hero__fish', { x: -300, duration: 22, ease: 'none', repeat: -1, delay: 1 });
-  gsap.to('.hero__fish', { y: 690, duration: 2.6, ease: 'sine.inOut', yoyo: true, repeat: -1 });
-  gsap.to('.hero__hooklure', { rotate: 8, transformOrigin: '50% 0%', duration: 1.8, ease: 'sine.inOut', yoyo: true, repeat: -1 });
-  $$('.hero__stars circle').forEach(s => gsap.to(s, { opacity: .25, duration: gsap.utils.random(1.5, 3.5), yoyo: true, repeat: -1, ease: 'sine.inOut', delay: Math.random() * 2 }));
-
-  // Pointer parallax on the scene
-  const hero = $('.hero');
-  hero.addEventListener('pointermove', e => {
-    const r = hero.getBoundingClientRect();
-    const px = (e.clientX - r.left) / r.width - .5, py = (e.clientY - r.top) / r.height - .5;
-    gsap.to('.hero__sun, .hero__glow', { x: px * 30, y: py * 20, duration: 1.2, ease: 'power3' });
-    gsap.to('.hero__forest', { x: px * -14, duration: 1.2, ease: 'power3' });
-  });
-
-  // Scroll out: title lifts, sun sinks
-  gsap.timeline({ scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } })
-    .to('.hero__copy', { yPercent: -30, opacity: 0, ease: 'none' }, 0)
-    .to('.hero__sun', { attr: { cy: 640 }, ease: 'none' }, 0)
-    .to('.hero__rod', { rotate: -6, transformOrigin: '0% 100%', ease: 'none' }, 0);
-
-  /* ---------- Ticker: speed follows scroll velocity ---------- */
-  const track = $('.ticker__track');
-  const tick = gsap.to(track, { xPercent: -50, duration: 22, ease: 'none', repeat: -1 });
-  let dir = 1;
-  ScrollTrigger.create({
-    onUpdate: self => {
-      const v = self.getVelocity();
-      dir = v < 0 ? -1 : 1;
-      gsap.to(tick, { timeScale: dir * gsap.utils.clamp(1, 6, Math.abs(v) / 200), duration: .2, overwrite: true });
-      gsap.to(tick, { timeScale: dir, duration: 1.2, delay: .25, overwrite: false });
-    }
-  });
-
-  /* ---------- Rod cards ---------- */
-  ScrollTrigger.batch('.rod-card', {
-    start: 'top 88%',
-    onEnter: batch => {
-      gsap.from(batch, { y: 80, rotate: () => gsap.utils.random(-4, 4), opacity: 0, duration: .9, ease: 'power3.out', stagger: .12 });
-      gsap.from(batch.map(c => $('.rod-card__img svg', c)), { clipPath: 'inset(0 100% 0 0)', duration: 1.3, ease: 'power3.inOut', stagger: .12, delay: .2 });
+function countUp(el, duration = 1.6) {
+  const target = parseFloat(el.dataset.count);
+  const dec = parseInt(el.dataset.dec || "0", 10);
+  const obj = { v: 0 };
+  return gsap.to(obj, {
+    v: target, duration, ease: "power3.out",
+    onUpdate: () => {
+      el.textContent = dec ? obj.v.toFixed(dec).replace(".", ",") : Math.round(obj.v).toLocaleString("sv-SE");
     },
-    once: true
   });
-  $$('.rod-card').forEach(card => {
-    card.addEventListener('pointermove', e => {
-      const r = card.getBoundingClientRect();
-      const px = (e.clientX - r.left) / r.width - .5, py = (e.clientY - r.top) / r.height - .5;
-      gsap.to(card, { rotateY: px * 8, rotateX: py * -8, transformPerspective: 900, duration: .5, ease: 'power3' });
-    });
-    card.addEventListener('pointerleave', () => gsap.to(card, { rotateY: 0, rotateX: 0, duration: .8, ease: 'elastic.out(1, .5)' }));
+}
+
+if (reduce) {
+  document.querySelectorAll("[data-count]").forEach(el => (el.textContent = el.dataset.count.replace(".", ",")));
+  document.querySelector(".ring-fg").style.strokeDashoffset = 528 * (1 - 1480 / 2100);
+  document.querySelectorAll(".tag, .result").forEach(el => (el.style.opacity = 1));
+} else {
+  // Hero intro
+  const intro = gsap.timeline({ defaults: { ease: "expo.out" } });
+  intro
+    .from(".nav", { y: -40, opacity: 0, duration: 1 })
+    .from(".hero-title .line > span", { yPercent: 110, duration: 1.3, stagger: 0.12 }, "-=0.7")
+    .from(".hero .reveal", { y: 24, opacity: 0, duration: 1, stagger: 0.1 }, "-=0.9")
+    .from(".phone", { y: 160, rotateX: 25, opacity: 0, duration: 1.6 }, "-=0.9")
+    .to(".ring-fg", { strokeDashoffset: 528 * (1 - 1480 / 2100), duration: 2, ease: "power3.inOut" }, "-=0.8")
+    .add(countUp(document.querySelector(".kcal"), 2), "<")
+    .from(".bar i", { scaleX: 0, duration: 1.2, stagger: 0.12, ease: "power3.out" }, "<0.3")
+    .from(".meal", { y: 20, opacity: 0, duration: 0.8 }, "<0.4")
+    .from(".float", { scale: 0.6, opacity: 0, duration: 1, stagger: 0.15, ease: "back.out(1.7)" }, "<");
+
+  // Floating chips bob
+  gsap.to(".f1", { y: -14, duration: 2.4, repeat: -1, yoyo: true, ease: "sine.inOut" });
+  gsap.to(".f2", { y: 14, duration: 2.8, repeat: -1, yoyo: true, ease: "sine.inOut" });
+
+  // Phone tilts away on scroll
+  gsap.to(".phone", {
+    rotateX: 12, scale: 0.92, y: 60,
+    scrollTrigger: { trigger: ".phone-wrap", start: "top 30%", end: "bottom top", scrub: true },
   });
 
-  /* ---------- Waters: horizontal scroll on large screens ---------- */
+  // Blobs drift with scroll
+  gsap.to(".b1", { x: "20vw", y: "30vh", scrollTrigger: { scrub: 1 } });
+  gsap.to(".b2", { x: "-25vw", y: "40vh", scrollTrigger: { scrub: 1 } });
+  gsap.to(".b3", { x: "-10vw", y: "-50vh", scrollTrigger: { scrub: 1 } });
+
+  // Statement: word-by-word light-up
+  const big = document.querySelector(".big-text");
+  const wrapWords = node => {
+    [...node.childNodes].forEach(child => {
+      if (child.nodeType === 3) {
+        const frag = document.createDocumentFragment();
+        child.textContent.split(/(\s+)/).forEach(part => {
+          if (!part.trim()) return frag.append(part);
+          const s = document.createElement("span");
+          s.className = "word";
+          s.textContent = part;
+          frag.append(s);
+        });
+        child.replaceWith(frag);
+      } else wrapWords(child);
+    });
+  };
+  wrapWords(big);
+  gsap.to(".big-text .word", {
+    opacity: 1, stagger: 0.1, ease: "none",
+    scrollTrigger: { trigger: ".statement", start: "top 75%", end: "bottom 45%", scrub: true },
+  });
+
+  // Scan: pinned sequence
+  const steps = document.querySelectorAll(".step");
+  const setStep = i => steps.forEach((s, j) => s.classList.toggle("active", j === i));
   const mm = gsap.matchMedia();
-  mm.add('(min-width: 761px)', () => {
-    const wtrack = $('.waters__track');
-    const dist = () => wtrack.scrollWidth - window.innerWidth;
-    const h = gsap.to(wtrack, {
-      x: () => -dist(), ease: 'none',
-      scrollTrigger: { trigger: '.waters', start: 'top top', end: () => '+=' + dist(), pin: true, scrub: 1, invalidateOnRefresh: true }
+  mm.add({ desktop: "(min-width: 861px)", mobile: "(max-width: 860px)" }, ctx => {
+    const scan = gsap.timeline({
+      scrollTrigger: {
+        trigger: ".scan", start: "top top", end: ctx.conditions.desktop ? "+=1800" : "+=1200",
+        pin: ".scan-pin", scrub: 0.6,
+        onUpdate: self => setStep(self.progress < 0.33 ? 0 : self.progress < 0.7 ? 1 : 2),
+      },
     });
-    $$('.water:not(.water--intro)').forEach(panel => {
-      gsap.from($('.water__art', panel), { scale: .85, rotate: -3, ease: 'none',
-        scrollTrigger: { trigger: panel, containerAnimation: h, start: 'left right', end: 'center center', scrub: true } });
-      gsap.from($$('.water__text > *', panel), { y: 60, opacity: 0, stagger: .1, ease: 'power3.out', duration: .8,
-        scrollTrigger: { trigger: panel, containerAnimation: h, start: 'left 60%' } });
-    });
+    scan
+      .from(".plate", { scale: 0.7, rotate: -30, opacity: 0, duration: 1 })
+      .from(".food", { scale: 0, stagger: 0.15, duration: 0.6, ease: "back.out(2)" }, "<0.3")
+      .to(".scanline", { opacity: 1, duration: 0.1 })
+      .to(".scanline", { top: "100%", duration: 1.2, ease: "none" })
+      .to(".scanline", { top: "0%", duration: 1.2, ease: "none" })
+      .to(".scanline", { opacity: 0, duration: 0.1 })
+      .to(".tag", { opacity: 1, y: -10, stagger: 0.25, duration: 0.5 }, "-=1.6")
+      .to(".result", { opacity: 1, y: -10, duration: 0.6 })
+      .add(() => {}, "+=0.4");
   });
-  mm.add('(max-width: 760px)', () => {
-    $$('.water').forEach(panel => gsap.from(panel.children, { y: 50, opacity: 0, stagger: .12, duration: .8, ease: 'power3.out', scrollTrigger: { trigger: panel, start: 'top 80%' } }));
-  });
-  // Living details inside the scenes
-  $$('.swim').forEach((f, i) => gsap.to(f, { x: i % 2 ? -60 : 70, duration: 3 + i, ease: 'sine.inOut', yoyo: true, repeat: -1 }));
-  gsap.to('.flow path', { x: 40, opacity: 0, duration: 2.2, ease: 'none', stagger: { each: .3, repeat: -1 } });
-  gsap.to('.jump', { y: -26, rotate: 6, transformOrigin: '50% 50%', duration: 1.4, ease: 'sine.inOut', yoyo: true, repeat: -1 });
-  gsap.to('.sea-waves', { x: 60, duration: 3, ease: 'none', repeat: -1 });
-  gsap.to('.pimpel', { y: -28, duration: .9, ease: 'power2.inOut', yoyo: true, repeat: -1 });
-
-  /* ---------- Reel: pinned exploded view ---------- */
-  mm.add('(min-width: 761px)', () => {
-    const tl = gsap.timeline({ scrollTrigger: { trigger: '.reel', start: 'top top', end: '+=140%', pin: '.reel__pin', scrub: 1 } });
-    tl.from('.part--handle', { x: 300, ease: 'power2.out' }, 0)
-      .from('.part--body', { x: 120, ease: 'power2.out' }, 0)
-      .from('.part--rotor', { x: -60, ease: 'power2.out' }, 0)
-      .from('.part--spool', { x: -200, ease: 'power2.out' }, 0)
-      .from('.part--drag', { x: -330, ease: 'power2.out' }, 0)
-      .from('.lbl', { y: 40, opacity: 0, stagger: .08 }, .3)
-      .to('.part--spool', { rotate: 360, transformOrigin: '50% 50%', ease: 'none' }, .2)
-      .to('.part--handle', { rotate: -25, transformOrigin: '100% 50%' }, .2);
-  });
-  mm.add('(max-width: 760px)', () => {
-    gsap.from('.part', { x: (i) => (2 - i) * 60, opacity: 0, stagger: .1, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: '.reel__svg', start: 'top 80%' } });
-    gsap.from('.lbl', { y: 30, opacity: 0, stagger: .08, duration: .7, scrollTrigger: { trigger: '.reel__labels', start: 'top 90%' } });
-  });
-
-  /* ---------- Lures: drop in, then swing; swing harder with scroll ---------- */
-  const hangs = $$('.lure__hang');
-  gsap.from(hangs, { y: -260, duration: 1.2, ease: 'bounce.out', stagger: .1, scrollTrigger: { trigger: '.lures__row', start: 'top 80%' } });
-  const swings = hangs.map((h, i) => gsap.fromTo(h, { rotate: -5 }, { rotate: 5, duration: 1.6 + i * .2, ease: 'sine.inOut', yoyo: true, repeat: -1 }));
   ScrollTrigger.create({
-    trigger: '.lures', start: 'top bottom', end: 'bottom top',
-    onUpdate: self => {
-      const s = gsap.utils.clamp(1, 3, 1 + Math.abs(self.getVelocity()) / 1500);
-      swings.forEach(t => gsap.to(t, { timeScale: s, duration: .3, overwrite: true }));
-    }
+    trigger: ".scan", start: "top -60%", once: true,
+    onEnter: () => countUp(document.querySelector(".result [data-count]"), 1.2),
   });
 
-  /* ---------- Stats count up ---------- */
-  $$('.stat__n').forEach(n => {
-    const end = Number(n.dataset.count), o = { v: 0 };
-    gsap.to(o, { v: end, duration: 2, ease: 'power2.out',
-      scrollTrigger: { trigger: n, start: 'top 85%' },
-      onUpdate: () => { n.textContent = Math.round(o.v).toLocaleString('sv-SE'); } });
+  // Generic reveals
+  gsap.utils.toArray(".reveal").forEach(el => {
+    if (el.closest(".hero")) return;
+    gsap.from(el, { y: 40, opacity: 0, duration: 1, ease: "expo.out", scrollTrigger: { trigger: el, start: "top 88%" } });
   });
 
-  /* ---------- CTA + footer ---------- */
-  gsap.from('.cta__big span', { xPercent: i => (i ? 40 : -40), opacity: 0, ease: 'power3.out', scrollTrigger: { trigger: '.cta', start: 'top 85%', end: 'top 30%', scrub: 1 } });
-  gsap.fromTo('.foot__word', { '--fill': '0%' }, { '--fill': '100%', ease: 'none', scrollTrigger: { trigger: '.foot', start: 'top bottom', end: 'bottom bottom', scrub: true } });
+  gsap.from(".card", {
+    y: 80, opacity: 0, duration: 1.1, stagger: 0.1, ease: "expo.out",
+    scrollTrigger: { trigger: ".grid", start: "top 80%" },
+  });
+  ScrollTrigger.create({
+    trigger: ".stat-row", start: "top 85%", once: true,
+    onEnter: () => document.querySelectorAll(".stat-row [data-count]").forEach(el => countUp(el, 2)),
+  });
 
-  window.addEventListener('load', () => ScrollTrigger.refresh());
-})();
+  gsap.from(".plan", {
+    y: 60, opacity: 0, duration: 1, stagger: 0.15, ease: "expo.out",
+    scrollTrigger: { trigger: ".plans", start: "top 80%" },
+  });
+
+  gsap.from(".final-card", {
+    scale: 0.88, opacity: 0, duration: 1.2, ease: "expo.out",
+    scrollTrigger: { trigger: ".final", start: "top 80%" },
+  });
+  gsap.from(".final-title", {
+    backgroundPosition: "0% 0%", y: 50, opacity: 0, duration: 1.2, ease: "expo.out",
+    scrollTrigger: { trigger: ".final", start: "top 70%" },
+  });
+
+  // Glass cards: light follows the pointer
+  document.querySelectorAll(".card, .plan").forEach(card => {
+    card.addEventListener("pointermove", e => {
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      gsap.to(card, { rotateY: x * 6, rotateX: -y * 6, transformPerspective: 900, duration: 0.5, ease: "power2.out" });
+    });
+    card.addEventListener("pointerleave", () => gsap.to(card, { rotateY: 0, rotateX: 0, duration: 0.8, ease: "elastic.out(1, 0.5)" }));
+  });
+}
