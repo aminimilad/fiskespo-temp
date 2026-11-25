@@ -1,188 +1,197 @@
 <!doctype html>
-<html lang="sv">
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Kalo – Ät smartare</title>
-  <meta name="description" content="Kalo räknar kalorier åt dig. Fota maten, få näringen direkt.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Studio Milad — Art Direction, UX &amp; iOS</title>
+  <meta name="description" content="Studio Milad. Milad Amini, art director, UX designer and iOS developer in Malmö.">
+  <meta name="theme-color" content="#060404">
+  <link rel="stylesheet" href="css/style.css">
+  <script>document.documentElement.classList.add('js')</script>
 </head>
 <body>
-  <!-- Liquid glass refraction (Chromium); other browsers fall back to blur -->
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-    <filter id="liquid" x="0" y="0" width="100%" height="100%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.008 0.012" numOctaves="2" seed="7" result="noise"/>
-      <feGaussianBlur in="noise" stdDeviation="2" result="soft"/>
-      <feDisplacementMap in="SourceGraphic" in2="soft" scale="38" xChannelSelector="R" yChannelSelector="G"/>
-    </filter>
-  </svg>
-
-  <div class="bg" aria-hidden="true">
-    <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span><span class="blob b4"></span>
+  <!-- LOADER (same as the live coming-soon page) -->
+  <div class="loader" aria-hidden="true">
+    <p class="loader__label">MILAD AMINI<br>PORTFOLIO ©2026</p>
+    <div class="loader__count"><span class="loader__val"></span><span class="loader__val"></span></div>
   </div>
+  <div class="loader-trail" aria-hidden="true"></div>
 
-  <header class="nav glass">
-    <a class="logo" href="#top"><span class="logo-dot"></span>Kalo</a>
-    <nav>
-      <a href="#scan">Skanna</a>
-      <a href="#features">Funktioner</a>
-      <a href="#pris">Pris</a>
-    </nav>
-    <a class="btn btn-small" href="#ladda">Ladda ner</a>
-  </header>
+  <!-- fixed nav, shows once the hero has scrolled away -->
+  <nav class="topnav" aria-label="Main">
+    <a href="#top">Home</a><a href="#work">Work</a><a href="#about">Info</a><a href="#contact">Contact</a>
+  </nav>
 
-  <main id="top">
-    <section class="hero">
-      <p class="eyebrow reveal">Ny · Version 2.0</p>
-      <h1 class="hero-title">
-        <span class="line"><span>Ät smartare.</span></span>
-        <span class="line"><span class="grad">Inte mindre.</span></span>
-      </h1>
-      <p class="lead reveal">Fota din tallrik. Kalo räknar kalorier, protein, kolhydrater och fett på en sekund.</p>
-      <div class="cta-row reveal">
-        <a class="btn" href="#ladda"> Ladda ner för iPhone</a>
-        <a class="btn btn-glass glass" href="#scan">Se hur det funkar</a>
+  <main>
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <canvas class="hero__gl" aria-hidden="true"></canvas>
+
+      <!-- editorial header (Gil Huybrecht style) -->
+      <header class="hero__head">
+        <div class="hh"><span class="tl"><span class="tl__in">Studio Milad</span></span></div>
+        <div class="hh"><span class="tl"><span class="tl__in">Available for projects, 2027</span></span></div>
+        <div class="hh">
+          <span class="tl"><span class="tl__in">Services</span></span>
+          <ul class="hh__list">
+            <li class="tl"><span class="tl__in">Art Direction</span></li>
+            <li class="tl"><span class="tl__in">UX &amp; Product Design</span></li>
+            <li class="tl"><span class="tl__in">iOS Development</span></li>
+            <li class="tl"><span class="tl__in">GSAP &amp; Motion</span></li>
+          </ul>
+        </div>
+        <div class="hh">
+          <span class="tl"><span class="tl__in">Based in</span></span>
+          <ul class="hh__list">
+            <li class="tl"><span class="tl__in">Malmö, Sweden</span></li>
+            <li class="tl"><span class="tl__in">Working <em>worldwide</em></span></li>
+          </ul>
+        </div>
+        <nav class="hh hh--nav" aria-label="Main">
+          <a href="#work">Work</a><a href="#about">Info</a><a href="#contact">Contact</a>
+        </nav>
+      </header>
+
+      <p class="wordmark" aria-label="Studio Milad">
+        <span class="ch ch--flip">S</span><span class="ch">T</span><span class="ch">U</span><span class="ch ch--flip">D</span><span class="ch">I</span><span class="ch">O</span><span class="sp"> </span><span class="ch">M</span><span class="ch">I</span><span class="ch">L</span><span class="ch">A</span><span class="ch">D</span>
+      </p>
+
+      <div class="hero__bar">
+        <span class="hero__time"><span class="glitch">MALMÖ</span> <time class="clock glitch">--:--</time></span>
+        <nav class="hero__social" aria-label="Social">
+          <a href="#">LinkedIn</a><i>/</i><a href="#">Instagram</a><i>/</i><a href="#">Behance</a>
+        </nav>
+        <a class="hero__down" href="#about">Scroll ↓</a>
+      </div>
+    </section>
+
+    <!-- ABOUT: portrait left, text right -->
+    <section class="about" id="about">
+      <div class="about__media">
+        <div class="stage">
+          <img class="layer layer--bg" src="assets/img/frame58.webp" alt="">
+          <img class="layer layer--pers" src="assets/img/rectangle-511.webp" alt="Milad Amini">
+          <img class="layer layer--splash" src="assets/img/splash-scatter.webp" alt="">
+        </div>
+        <p class="about__cap"><span>(Portrait)</span><span>Malmö, 2026</span></p>
+      </div>
+      <div class="about__text">
+        <p class="label">(Info)</p>
+        <p class="about__lead" data-split>I'm <em>Milad</em> — an art director, UX designer and iOS developer from Malmö.</p>
+        <p class="about__body">I design and build digital products end to end: from the first moodboard to the last line of Swift. Apps people use on the move, websites and stores with a strong visual voice — always clear first, beautiful always.</p>
+        <a class="link-arrow" href="#">About me <span>↗</span></a>
+      </div>
+    </section>
+
+    <!-- WORK -->
+    <section class="work" id="work">
+      <div class="work__head">
+        <h2 class="section-title">All<span class="paren">(<em>0</em>)</span></h2>
+        <p class="label">Selected work — in progress</p>
+      </div>
+      <div class="work__empty">
+        <p class="work__empty-text">Här ska projekten finnas</p>
+      </div>
+    </section>
+
+    <!-- SKILLS (art-yakushev style: sticky image, italic labels, lists scrolling past) -->
+    <section class="skills">
+      <div class="skills__intro">
+        <p class="skills__kicker">(My areas <em>of focus</em>)</p>
+        <h2 class="skills__title"><span>Key skills</span><span>&amp; interests</span></h2>
       </div>
 
-      <div class="phone-wrap">
-        <div class="phone">
-          <div class="screen">
-            <div class="island"></div>
-            <p class="s-date">Måndag 24 nov</p>
-            <p class="s-hello">Idag</p>
-            <div class="ring-wrap">
-              <svg class="ring" viewBox="0 0 200 200">
-                <defs>
-                  <linearGradient id="rg" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0" stop-color="#b8c2d1"/><stop offset=".5" stop-color="#93a3ba"/><stop offset="1" stop-color="#6f819b"/>
-                  </linearGradient>
-                </defs>
-                <circle cx="100" cy="100" r="84" class="ring-bg"/>
-                <circle cx="100" cy="100" r="84" class="ring-fg" stroke="url(#rg)"/>
-              </svg>
-              <div class="ring-center">
-                <span class="kcal" data-count="1480">0</span>
-                <span class="kcal-sub">av 2 100 kcal</span>
-              </div>
-            </div>
-            <div class="macros">
-              <div class="macro"><span>Protein</span><div class="bar"><i style="--w:72%;--c:#c3cad6"></i></div><b>96 g</b></div>
-              <div class="macro"><span>Kolhydr.</span><div class="bar"><i style="--w:58%;--c:#93a3ba"></i></div><b>164 g</b></div>
-              <div class="macro"><span>Fett</span><div class="bar"><i style="--w:44%;--c:#6f819b"></i></div><b>48 g</b></div>
-            </div>
-            <div class="meal glass-dark">
-              <span class="meal-emoji">🥗</span>
-              <div><b>Lunch</b><small>Kycklingsallad</small></div>
-              <span class="meal-kcal">520</span>
-            </div>
+      <div class="skills__body">
+        <div class="skills__sticky">
+          <div class="skills__card">
+            <img src="assets/img/frame58.webp" alt="">
+            <img class="skills__paint" src="assets/img/hid.webp" alt="">
           </div>
         </div>
-        <div class="float f1 glass"><span>🔥</span><div><b>12 dagar</b><small>i rad</small></div></div>
-        <div class="float f2 glass"><span>💧</span><div><b>1,8 l</b><small>vatten</small></div></div>
-      </div>
-    </section>
 
-    <section class="statement">
-      <p class="big-text">Ingen våg. Ingen streckkod. Inget krångel. <span class="dim">Bara en bild av det du äter – och Kalo vet resten.</span></p>
-    </section>
-
-    <section class="scan" id="scan">
-      <div class="scan-pin">
-        <div class="scan-copy">
-          <p class="eyebrow">Skanna</p>
-          <h2 class="h2">En bild.<br><span class="grad">Allt du behöver veta.</span></h2>
-          <ol class="steps">
-            <li class="step active"><b>1</b> Rikta kameran mot tallriken</li>
-            <li class="step"><b>2</b> Kalo känner igen varje ingrediens</li>
-            <li class="step"><b>3</b> Näringen loggas automatiskt</li>
-          </ol>
-        </div>
-        <div class="scan-visual">
-          <div class="plate">
-            <span class="food fo1">🍗</span><span class="food fo2">🥑</span><span class="food fo3">🍅</span><span class="food fo4">🥬</span>
-            <div class="scanline"></div>
+        <div class="skills__lists">
+          <div class="skills__group">
+            <p class="skills__label"><em>Capabilities</em></p>
+            <ul>
+              <li>Art Direction</li>
+              <li>UX Design</li>
+              <li>iOS Development</li>
+              <li>GSAP &amp; Motion</li>
+              <li>Product Design</li>
+              <li>UI Design</li>
+              <li>Web Design</li>
+              <li>Design Systems</li>
+              <li>Prototyping</li>
+              <li>Shopify &amp; WordPress</li>
+            </ul>
           </div>
-          <div class="tag t1 glass">Kyckling · 240 kcal</div>
-          <div class="tag t2 glass">Avokado · 160 kcal</div>
-          <div class="tag t3 glass">Tomat · 18 kcal</div>
-          <div class="result glass"><small>Totalt</small><b><span data-count="520">0</span> kcal</b></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="features" id="features">
-      <p class="eyebrow center reveal">Funktioner</p>
-      <h2 class="h2 center reveal">Byggd för hur du<br>faktiskt äter.</h2>
-      <div class="grid">
-        <article class="card glass wide">
-          <div class="card-icon">📸</div>
-          <h3>AI-skanning</h3>
-          <p>Känner igen över 50 000 rätter, från husmanskost till sushi.</p>
-          <div class="chips"><span>Pasta</span><span>Ramen</span><span>Köttbullar</span><span>Poké</span><span>Tacos</span></div>
-        </article>
-        <article class="card glass">
-          <div class="card-icon">🎯</div>
-          <h3>Personliga mål</h3>
-          <p>Gå ner, bygg muskler eller håll vikten. Kalo anpassar sig.</p>
-        </article>
-        <article class="card glass">
-          <div class="card-icon">⌚️</div>
-          <h3>Apple Watch</h3>
-          <p>Se dagens kalorier direkt på handleden.</p>
-        </article>
-        <article class="card glass wide">
-          <div class="card-icon">❤️</div>
-          <h3>Apple Hälsa</h3>
-          <p>Synkar steg och träning så kaloribudgeten alltid stämmer.</p>
-        </article>
-        <article class="card glass full dark">
-          <div class="stat-row">
-            <div><b data-count="2">0</b><span>miljoner användare</span></div>
-            <div><b data-count="4.9" data-dec="1">0</b><span>betyg i App Store</span></div>
-            <div><b data-count="1" >0</b><span>sekund per måltid</span></div>
+          <div class="skills__group">
+            <p class="skills__label"><em>Expertise</em></p>
+            <ul>
+              <li>Swift &amp; SwiftUI</li>
+              <li>HTML, CSS &amp; JavaScript</li>
+              <li>User Research</li>
+              <li>Usability Testing</li>
+              <li>Brand Identity</li>
+              <li>Creative Coding</li>
+            </ul>
           </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="pricing" id="pris">
-      <p class="eyebrow center reveal">Pris</p>
-      <h2 class="h2 center reveal">Gratis att börja.</h2>
-      <div class="plans">
-        <div class="plan glass">
-          <h3>Bas</h3>
-          <p class="price">0 kr</p>
-          <ul><li>Manuell loggning</li><li>Dagliga mål</li><li>Apple Hälsa</li></ul>
-          <a class="btn btn-glass glass" href="#ladda">Kom igång</a>
+          <div class="skills__group">
+            <p class="skills__label"><em>Inspiration</em></p>
+            <ul>
+              <li>Swiss Typography</li>
+              <li>Posters</li>
+              <li>Music</li>
+              <li>Cinema</li>
+              <li>Editorial Design</li>
+              <li>Street Signage</li>
+              <li>Fashion</li>
+            </ul>
+          </div>
         </div>
-        <div class="plan glass featured">
-          <span class="badge">Populärast</span>
-          <h3>Plus</h3>
-          <p class="price">49 kr<small>/mån</small></p>
-          <ul><li>Obegränsad AI-skanning</li><li>Makron och mikronäring</li><li>Apple Watch-app</li><li>Veckorapporter</li></ul>
-          <a class="btn" href="#ladda">Prova gratis i 7 dagar</a>
-        </div>
-      </div>
-    </section>
-
-    <section class="final" id="ladda">
-      <div class="final-card glass">
-        <h2 class="final-title">Din nästa måltid<br><span class="grad">räknas.</span></h2>
-        <a class="btn btn-big" href="#top"> Ladda ner i App Store</a>
       </div>
     </section>
   </main>
 
-  <footer class="footer">
-    <span>© 2026 Kalo</span>
-    <span>Integritet · Villkor · Kontakt</span>
+  <!-- FOOTER (art-yakushev style) -->
+  <footer class="foot" id="contact">
+    <div class="foot__main">
+      <div class="foot__mark" aria-label="Studio Milad">
+        <span class="foot__sm"><span class="ch--flip">S</span>M</span>
+        <span class="foot__year">–26</span>
+      </div>
+
+      <dl class="foot__info">
+        <div><dt><em>Email</em></dt><dd><a href="#">hello@milad.studio</a></dd></div>
+        <div class="foot__gap"><dt><em>Social</em></dt><dd><a href="#">LinkedIn</a><a href="#">Instagram</a><a href="#">Behance</a><a href="#">GitHub</a></dd></div>
+        <div class="foot__gap"><dt><em>Menu</em></dt><dd><a href="#top">Home</a><a href="#work">Work</a><a href="#about">Info</a></dd></div>
+      </dl>
+    </div>
+
+    <div class="foot__legal">
+      <span>Open for freelance &amp; collaborations</span>
+      <a href="#top">Back to top ↑</a>
+      <span>©2026 All Rights Reserved</span>
+    </div>
+
+    <!-- the closing panel: gradient + name, revealed as you reach the end -->
+    <div class="foot__end">
+      <canvas class="foot__gl" aria-hidden="true"></canvas>
+      <p class="foot__name"><span>Studio</span><em>Milad</em></p>
+      <div class="foot__endbar">
+        <span>Malmö <time class="clock">--:--</time></span>
+        <span>Art Direction / UX / iOS</span>
+        <span>55.6050° N, 13.0038° E</span>
+      </div>
+    </div>
   </footer>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="main.js"></script>
+  <div class="grain" aria-hidden="true"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
+  <script src="js/gradient.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>
