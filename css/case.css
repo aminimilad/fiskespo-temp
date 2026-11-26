@@ -158,15 +158,12 @@
 .wl {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  min-height: 100vh;
 }
+/* the titles scroll through the middle of the screen; the preview column stays put beside them */
 .wl__list {
-  position: sticky;
-  top: 0;
-  height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  padding: 50vh 0 calc(50vh - 64px);
 }
 .wl__item {
   width: 100%;
@@ -248,3 +245,4 @@
 .is-leaving .veil { opacity: 1; pointer-events: auto; }
 .is-arriving .veil { opacity: 1; transition: none; }
 .is-arriving .loader, .is-arriving .loader-trail { display: none; }
+.case__visit--note { border-bottom: 0; color: var(--mute); }

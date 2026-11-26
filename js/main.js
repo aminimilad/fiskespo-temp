@@ -358,6 +358,7 @@
     };
     if (lenis) lenis.on('scroll', onScroll); else addEventListener('scroll', onScroll, { passive: true });
     onScroll();
+    wlItems.forEach((it, i) => it.addEventListener('pointerenter', () => activate(i)));
 
     // tilt the card with the mouse, and a "See project" pill follows the cursor over it
     const pill = $('.wl__cursor');
