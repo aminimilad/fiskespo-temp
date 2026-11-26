@@ -5,7 +5,7 @@
   const PHI = 1.618;
 
   /* ---------- ROLLING LINKS ---------- */
-  $$('.topnav a, .hh--nav a, .hero__social a, .hero__down, .foot__info dd a, .foot__legal a').forEach((a) => {
+  $$('.topnav a, .hh--nav a, .hero > .hero__bar .hero__social a, .hero > .hero__bar .hero__down, .foot__info dd a, .foot__nav a').forEach((a) => {
     const t = a.textContent;
     a.innerHTML = `<span class="roll"><span data-t="${t}">${t}</span></span>`;
   });
@@ -35,42 +35,47 @@
   tick();
   setInterval(tick, 1000);
 
-  /* ---------- FIT: STUDIO MILAD fills the hero width (ink edge to ink edge) ---------- */
-  const wordmark = $('.wordmark');
-  const hero = $('.hero');
-  const mctx = document.createElement('canvas').getContext('2d');
-  function inkEdges() {
-    const cs = wordmark.querySelectorAll('.ch');
-    const first = cs[0], last = cs[cs.length - 1];
-    mctx.font = `700 ${getComputedStyle(wordmark).fontSize} "Helvetica Now Display"`;
-    const fr = first.getBoundingClientRect();
-    const fm = mctx.measureText(first.textContent);
-    const left = first.classList.contains('ch--flip')
-      ? fr.left + fr.width - fm.actualBoundingBoxRight     // mirrored glyph
-      : fr.left - fm.actualBoundingBoxLeft;
-    const right = last.getBoundingClientRect().left + mctx.measureText(last.textContent).actualBoundingBoxRight;
-    return { left, right };
+  /* ---------- CHAR SPLIT (keeps <em>, words never break) ---------- */
+  function splitChars(el) {
+    const walk = (node) => {
+      [...node.childNodes].forEach((n) => {
+        if (n.nodeType === 3) {
+          const frag = document.createDocumentFragment();
+          n.textContent.split(/(\s+)/).forEach((part) => {
+            if (!part) return;
+            if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(' ')); return; }
+            const w = document.createElement('span');
+            w.className = 'word';
+            for (const c of part) {
+              const ch = document.createElement('span');
+              ch.className = 'char';
+              ch.textContent = c;
+              w.appendChild(ch);
+            }
+            frag.appendChild(w);
+          });
+          n.replaceWith(frag);
+        } else if (n.nodeType === 1) walk(n);
+      });
+    };
+    walk(el);
   }
-  function fitWordmark() {
-    const pad = parseFloat(getComputedStyle(hero).paddingLeft);
-    wordmark.style.translate = '0 0';
-    wordmark.style.fontSize = '100px';
-    let e = inkEdges();
-    wordmark.style.fontSize = (100 * (innerWidth - 2 * pad)) / (e.right - e.left) + 'px';
-    e = inkEdges();
-    wordmark.style.translate = `${pad - e.left}px 0`;
+  $$('[data-chars], [data-letters], .shuf').forEach(splitChars);
+  // the S of "Studio" is mirrored, like the logo
+  $$('.name').forEach((n) => n.querySelector('.char').classList.add('flip'));
+
+  /* ---------- FIT: STUDIO MILAD fills the width (one line), or two centred lines on a phone ---------- */
+  function fitName(el) {
+    const box = el.parentElement;
+    const cs = getComputedStyle(box);
+    const avail = box.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    el.style.fontSize = '100px';
+    el.style.width = 'max-content';
+    const w = el.getBoundingClientRect().width;
+    el.style.width = '';
+    el.style.fontSize = (100 * avail * 0.995) / w + 'px';
   }
-  // the footer name: same idea, simpler (box width)
-  const fname = $('.foot__name');
-  function fitFootName() {
-    const avail = fname.parentElement.clientWidth - 2 * parseFloat(getComputedStyle(fname.parentElement).paddingLeft);
-    fname.style.fontSize = '100px';
-    fname.style.width = 'max-content';
-    const w = fname.getBoundingClientRect().width;
-    fname.style.width = '';
-    fname.style.fontSize = (100 * avail) / w + 'px';
-  }
-  const fitAll = () => { fitWordmark(); fitFootName(); };
+  const fitAll = () => $$('.name').forEach(fitName);
   fitAll();
   addEventListener('resize', fitAll);
   document.fonts && document.fonts.ready.then(() => { fitAll(); window.ScrollTrigger && ScrollTrigger.refresh(); });
@@ -102,42 +107,29 @@
 
   /* ---------- GRADIENTS ---------- */
   const heroG = window.createGradient($('.hero__gl'), { scale: 0.5 });
-  const footG = window.createGradient($('.foot__gl'), { scale: 0.4, variant: 'foot' });
-  if (footG) footG.state.intro = 1;
+  const footG = window.createDance($('.foot__gl'), { scale: 0.22 });
   const t0 = performance.now();
   gsap.ticker.add(() => {
     const s = reduce ? 0 : (performance.now() - t0) / 1000;
     heroG && heroG.render(s);
-    footG && footG.render(s + 30);
+    footG && footG.render(s + 12);
   });
-  const movers = [heroG, footG].filter(Boolean).map((g) => ({
+  const movers = [heroG].filter(Boolean).map((g) => ({
     x: gsap.quickTo(g.state, 'mouseX', { duration: 2.2, ease: 'power3.out' }),
     y: gsap.quickTo(g.state, 'mouseY', { duration: 2.2, ease: 'power3.out' }),
   }));
   addEventListener('pointermove', (e) => movers.forEach((m) => { m.x(e.clientX / innerWidth); m.y(e.clientY / innerHeight); }));
 
-  /* ---------- WORD SPLIT ---------- */
-  $$('[data-split]').forEach((el) => {
-    const out = [];
-    el.childNodes.forEach((n) => {
-      const isEm = n.nodeName === 'EM';
-      n.textContent.split(/(\s+)/).forEach((part) => {
-        if (!part) return;
-        if (/^\s+$/.test(part)) { out.push(' '); return; }
-        out.push(`<span class="w">${isEm ? `<em>${part}</em>` : part}</span>`);
-      });
-    });
-    el.innerHTML = out.join('');
-  });
-
-  const chars = $$('.wordmark .ch');
-  // flipped glyphs keep their mirror while GSAP owns the transform
-  chars.forEach((c) => gsap.set(c, { scaleX: c.classList.contains('ch--flip') ? -1 : 1 }));
-  gsap.set(['.hero__head', '.wordmark', '.hero__bar'], { autoAlpha: 1 });
+  const chars = $$('.hero .name .char');
+  // mirrored glyphs keep their mirror while GSAP owns the transform
+  $$('.name .char.flip').forEach((c) => gsap.set(c, { scaleX: -1 }));
+  gsap.set(['.hero > .hero__head', '.wordmark', '.hero > .hero__bar'], { autoAlpha: 1 });
 
   if (reduce) {
     $$('.loader, .loader-trail').forEach((el) => el.remove());
     if (heroG) heroG.state.intro = 1;
+    gsap.set('.side', { autoAlpha: 1 });
+    $$('.shuf .char').forEach((c) => (c.style.opacity = 1));
     $$('.skills__group li').forEach((li) => li.classList.add('is-on'));
     return;
   }
@@ -156,7 +148,7 @@
       duration: PHI,
       stagger: { each: 0.1 / PHI, from: 'center' },
     }, 1 / PHI)
-    .from('.tl__in', {
+    .from('.hero .tl__in', {
       yPercent: 110,
       rotate: 6,
       transformOrigin: '0% 100%',
@@ -164,8 +156,9 @@
       duration: PHI,
       stagger: 0.04,
     }, 1 / PHI ** 2)
-    .from(['.hero__bar', '.hh--nav'], { autoAlpha: 0, duration: 1, ease: 'sine.out' }, PHI)
-    .add(() => $$('.hero__bar .gl').forEach((g, i) => distort(g, 0.3 + i * 0.035)), PHI)
+    .from(['.hero > .hero__bar', '.hero .hh--nav'], { autoAlpha: 0, duration: 1, ease: 'sine.out' }, PHI)
+    .to('.side', { autoAlpha: 1, duration: 1, ease: 'sine.out' }, PHI)
+    .add(() => $$('.hero > .hero__bar .gl').forEach((g, i) => distort(g, 0.3 + i * 0.035)), PHI)
     .add(startIdle);
 
   runLoader(document.fonts ? document.fonts.ready : Promise.resolve(), () => {
@@ -182,7 +175,7 @@
     // now and then a few letters in the bar glitch
     (function glitch() {
       gsap.delayedCall(gsap.utils.random(0.8, 3), () => {
-        const letters = $$('.hero__bar .gl').filter((g) => g.dataset.c.trim());
+        const letters = $$('.hero > .hero__bar .gl').filter((g) => g.dataset.c.trim());
         const k = gsap.utils.random(1, 3, 1);
         for (let i = 0; i < k; i++) distort(gsap.utils.random(letters), gsap.utils.random(0.15, 0.45));
         glitch();
@@ -217,63 +210,47 @@
 
   /* ---------- HERO OUT ---------- */
   // everything in the hero leaves together (no overlap with the bar), the gradient stays
-  gsap.to(['.hero__head', '.wordmark', '.hero__bar'], {
+  gsap.to(['.hero > .hero__head', '.wordmark', '.hero > .hero__bar'], {
     yPercent: -18, autoAlpha: 0, ease: 'none',
     scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true },
   });
   // the fixed nav takes over once the hero's own nav is gone
   ScrollTrigger.create({
     trigger: '.hero', start: 'bottom 20%',
+    // ...and steps aside again on the closing screen, which has its own copy of the hero nav
     onToggle: (self) => $('.topnav').classList.toggle('is-on', self.isActive),
-    end: () => '+=' + document.documentElement.scrollHeight,
+    endTrigger: '.foot__end', end: 'top 40%',
   });
 
-  /* ---------- ABOUT: the live page's portrait, painted in on scroll ---------- */
-  const stage = $('.stage');
-  const bg = $('.layer--bg'), pers = $('.layer--pers'), splash = $('.layer--splash');
-  gsap.timeline({ defaults: { ease: 'expo.out' }, scrollTrigger: { trigger: '.about', start: 'top 85%' } })
-    .from(bg, { scale: 1 + 1 / PHI ** 3, autoAlpha: 0, filter: 'blur(21px)', duration: PHI })
-    .from(pers, { autoAlpha: 0, yPercent: 3, filter: 'blur(13px)', duration: PHI ** 2, ease: 'sine.inOut' }, 1 / PHI ** 2)
-    .fromTo(splash,
-      { clipPath: 'inset(0 100% 0 0)', scale: 1 + 1 / PHI ** 4, rotate: -8, transformOrigin: '50% 50%' },
-      { clipPath: 'inset(0 0% 0 0)', scale: 1, rotate: 0, duration: 1, ease: 'power4.inOut' }, 1)
-    .add(() => gsap.to(splash, { rotate: 2.5, scale: 1.03, duration: 2 * PHI, ease: 'sine.inOut', yoyo: true, repeat: -1 }));
-
-  // pointer parallax per layer (Fibonacci depths)
-  const depth = [[bg, 0], [pers, 13], [splash, 34]].map(([el, d]) => ({
-    x: gsap.quickTo(el, 'x', { duration: 0.9, ease: 'power3.out' }),
-    y: gsap.quickTo(el, 'y', { duration: 0.9, ease: 'power3.out' }),
-    d,
-  }));
-  stage.addEventListener('pointermove', (e) => {
-    const r = stage.getBoundingClientRect();
-    const nx = (e.clientX - r.left) / r.width - 0.5, ny = (e.clientY - r.top) / r.height - 0.5;
-    depth.forEach((l) => { l.x(nx * l.d); l.y(ny * l.d); });
+  /* ---------- ABOUT (art-yakushev, same values) ---------- */
+  const mm = gsap.matchMedia();
+  // the statement: letter by letter out of a blur, scrubbed
+  const titleChars = $$('.about__title .char');
+  gsap.set(titleChars, { opacity: 0, filter: 'blur(10px)' });
+  gsap.to(titleChars, {
+    opacity: 1, filter: 'blur(0px)', ease: 'power1.out', duration: 1, stagger: { amount: 0.8 },
+    scrollTrigger: { trigger: '.about__title', start: 'top 80%', end: 'bottom 20%', scrub: 0.15 },
   });
-  stage.addEventListener('pointerleave', () => depth.forEach((l) => { l.x(0); l.y(0); }));
-  // click repaints the splash
-  stage.addEventListener('click', () => {
-    gsap.timeline()
-      .to(splash, { clipPath: 'inset(0 0 0 100%)', duration: 0.35, ease: 'power3.in' })
-      .set(splash, { clipPath: 'inset(0 100% 0 0)' })
-      .to(splash, { clipPath: 'inset(0 0% 0 0)', duration: 0.7, ease: 'power4.out' });
-  });
-
-  // the portrait grows as it scrolls in (not full screen), photo eases from a closer crop
-  gsap.timeline({ scrollTrigger: { trigger: '.about', start: 'top bottom', end: 'center center', scrub: 1 } })
-    .fromTo('.about__media', { scale: 0.62, y: 80 }, { scale: 1, y: 0, ease: 'power2.out' }, 0)
-    .fromTo('.stage', { clipPath: 'inset(6% 6% 6% 6%)' }, { clipPath: 'inset(0% 0% 0% 0%)', ease: 'power2.out' }, 0)
-    .fromTo('.about__text', { y: 120 }, { y: 0, ease: 'power2.out' }, 0);
-
-  $$('[data-split]').forEach((el) => {
-    gsap.fromTo($$('.w', el), { opacity: 0.15 }, {
-      opacity: 1, stagger: 0.05, ease: 'none',
-      scrollTrigger: { trigger: el, start: 'top 85%', end: 'bottom 60%', scrub: true },
+  mm.add('(min-width: 861px)', () => {
+    // info: out of a heavy blur
+    gsap.fromTo('.about__info', { filter: 'blur(20px)', opacity: 0 }, {
+      filter: 'blur(0px)', opacity: 1, ease: 'power1.out',
+      scrollTrigger: { trigger: '.about__info', start: 'top 95%', end: 'bottom 90%', scrub: true },
     });
+    // the photo drifts down slower than the page, the picture inside even slower
+    gsap.timeline({ scrollTrigger: { trigger: '.about', start: 'top 90%', end: 'bottom -20%', scrub: 0.5 } })
+      .to('.about__photo', { y: () => innerHeight * 0.32, ease: 'none' })
+      .to('.about__img', { y: () => innerHeight * 0.22, ease: 'none' }, '<');
   });
-  gsap.from('.about__body, .about__text .link-arrow', {
-    y: 24, autoAlpha: 0, duration: 1.2, ease: 'expo.out', stagger: 0.1,
-    scrollTrigger: { trigger: '.about__body', start: 'top 90%' },
+  mm.add('(max-width: 860px)', () => {
+    gsap.fromTo('.about__info', { filter: 'blur(20px)', opacity: 0 }, {
+      filter: 'blur(0px)', opacity: 1, ease: 'power1.out',
+      scrollTrigger: { trigger: '.about__info', start: 'top 100%', end: 'top 75%', scrub: true },
+    });
+    gsap.to('.about__img', {
+      y: () => innerHeight * 0.08, ease: 'none',
+      scrollTrigger: { trigger: '.about__photo', start: 'top bottom', end: 'bottom top', scrub: 0.5 },
+    });
   });
 
   /* ---------- WORK ---------- */
@@ -298,18 +275,53 @@
   });
 
   /* ---------- FOOTER ---------- */
-  gsap.from('.foot__sm, .foot__year', {
-    yPercent: 30, autoAlpha: 0, duration: PHI, ease: 'expo.out', stagger: 0.12,
-    scrollTrigger: { trigger: '.foot__main', start: 'top 80%' },
+  gsap.from('.foot__info > div, .foot__nav, .foot__copy', {
+    y: 24, autoAlpha: 0, filter: 'blur(8px)', duration: 1.2, ease: 'expo.out', stagger: 0.08,
+    scrollTrigger: { trigger: '.foot__content', start: 'top 85%' },
   });
-  gsap.from('.foot__info > div', {
-    y: 20, autoAlpha: 0, duration: 1.2, ease: 'expo.out', stagger: 0.08,
-    scrollTrigger: { trigger: '.foot__info', start: 'top 85%' },
+
+  // closing screen, as on art-yakushev: the name rises from the centre out,
+  // then the small texts shuffle in letter by letter
+  function shuffleIn(el, speed = 1, shuffleFor = 0.4) {
+    const cs = $$('.char', el);
+    const orig = cs.map((c) => c.textContent);
+    let iv = null;
+    const putBack = () => { clearInterval(iv); iv = null; cs.forEach((c, i) => (c.textContent = orig[i])); };
+    const tl = gsap.timeline({ onComplete: putBack });
+    tl.call(() => {
+      putBack();
+      iv = setInterval(() => {
+        const s = orig.slice();
+        for (let i = s.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [s[i], s[j]] = [s[j], s[i]]; }
+        cs.forEach((c, i) => (c.textContent = s[i]));
+      }, 100);
+    }, null, 0);
+    cs.forEach((c, i) => tl.call(() => (c.style.opacity = '1'), null, i * 0.04 * speed));
+    tl.call(putBack, null, Math.max(shuffleFor, cs.length * 0.04 * speed));
+    tl.to({}, { duration: 0.3 });
+    return tl;
+  }
+  const endChars = $$('.foot__name .char');
+  const end = gsap.timeline({ paused: true });
+  end
+    .from(endChars, { yPercent: 150, duration: 1.5, ease: 'expo.inOut', stagger: { from: 'center', each: 0.03 } }, 0)
+    .from('.foot__head .tl__in', {
+      yPercent: 110, rotate: 6, transformOrigin: '0% 100%', filter: 'blur(8px)',
+      duration: PHI, ease: 'expo.out', stagger: 0.04,
+    }, 0.2)
+    .from('.foot__head .hh--nav', { autoAlpha: 0, duration: 1, ease: 'sine.out' }, 0.8)
+    .from('.foot__bar .clock', { autoAlpha: 0, duration: 0.6 }, 1.4);
+  const shufs = $$('.foot__bar .shuf');
+  [[0, 1.0, 0.6, 1.2], [1, 0.5, 0.7, 1.5], [2, 0.5, 0.7, 1.6], [3, 0.5, 0.7, 1.7], [4, 1.3, 0.7, 1.9]].forEach(([i, sp, d, at]) => {
+    if (shufs[i]) end.add(() => shuffleIn(shufs[i], sp, d), at);
   });
-  // the closing panel slides out from under the footer
-  gsap.fromTo(['.foot__gl', '.foot__name'], { yPercent: -35 }, {
-    yPercent: 0, ease: 'none',
-    scrollTrigger: { trigger: '.foot__end', start: 'top bottom', end: 'bottom bottom', scrub: true },
+  ScrollTrigger.create({
+    trigger: '.foot__name', start: 'top 100%',
+    onEnter: () => end.restart(),
+    onLeaveBack: () => {
+      end.pause(0);
+      $$('.foot__bar .shuf .char').forEach((c) => (c.style.opacity = ''));
+    },
   });
 
   /* ---------- LOADER (from the live page) ---------- */

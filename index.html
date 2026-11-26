@@ -22,6 +22,10 @@
     <a href="#top">Home</a><a href="#work">Work</a><a href="#about">Info</a><a href="#contact">Contact</a>
   </nav>
 
+  <!-- side marks, art-yakushev style: S (mirrored) left, M right -->
+  <a class="side side--l" href="#top" aria-label="Studio Milad, back to top"><span class="flip">S</span></a>
+  <span class="side side--r" aria-hidden="true">M</span>
+
   <main>
     <!-- HERO -->
     <section class="hero" id="top">
@@ -52,9 +56,10 @@
         </nav>
       </header>
 
-      <p class="wordmark" aria-label="Studio Milad">
-        <span class="ch ch--flip">S</span><span class="ch">T</span><span class="ch">U</span><span class="ch ch--flip">D</span><span class="ch">I</span><span class="ch">O</span><span class="sp"> </span><span class="ch">M</span><span class="ch">I</span><span class="ch">L</span><span class="ch">A</span><span class="ch">D</span>
-      </p>
+      <h1 class="wordmark name" aria-label="Studio Milad">
+        <span class="name__line" data-chars>Studio</span>
+        <span class="name__line" data-chars><em>Milad</em></span>
+      </h1>
 
       <div class="hero__bar">
         <span class="hero__time"><span class="glitch">MALMÖ</span> <time class="clock glitch">--:--</time></span>
@@ -65,21 +70,25 @@
       </div>
     </section>
 
-    <!-- ABOUT: portrait left, text right -->
+    <!-- ABOUT (art-yakushev layout: big statement, photo behind it on the left, info on the right) -->
     <section class="about" id="about">
-      <div class="about__media">
-        <div class="stage">
-          <img class="layer layer--bg" src="assets/img/frame58.webp" alt="">
-          <img class="layer layer--pers" src="assets/img/rectangle-511.webp" alt="Milad Amini">
-          <img class="layer layer--splash" src="assets/img/splash-scatter.webp" alt="">
+      <p class="about__title" data-letters>
+        <span class="about__t1">I'm Milad, an <em>art director</em>, UX designer and iOS developer who helps brands</span>
+        <span class="about__t2">and products look sharp, feel effortless and <em>stay remembered</em> long after the first tap.</span>
+      </p>
+
+      <div class="about__info">
+        <p class="about__label">(Info)</p>
+        <div class="about__copy">
+          <p>My name is Milad Amini. I'm a designer who codes, based in Malmö, working across art direction, UX and native iOS, so ideas never get lost between the moodboard and the App Store.</p>
+          <p>Day to day I design and ship apps that people rely on while they're on the move, next to identities, websites and stores with a strong visual voice. I take products from the first sketch and user interview to pixel-perfect SwiftUI and motion built with GSAP.</p>
+          <p>I believe in clarity first and craft always: Swiss structure, bold type, honest colour and animation that has a reason to move. Whether it's a brand, a product or a single screen, I care about the details nobody notices until they're missing.</p>
+          <a class="link-line" href="#">About me</a>
         </div>
-        <p class="about__cap"><span>(Portrait)</span><span>Malmö, 2026</span></p>
       </div>
-      <div class="about__text">
-        <p class="label">(Info)</p>
-        <p class="about__lead" data-split>I'm <em>Milad</em> — an art director, UX designer and iOS developer from Malmö.</p>
-        <p class="about__body">I design and build digital products end to end: from the first moodboard to the last line of Swift. Apps people use on the move, websites and stores with a strong visual voice — always clear first, beautiful always.</p>
-        <a class="link-arrow" href="#">About me <span>↗</span></a>
+
+      <div class="about__photo">
+        <img class="about__img" src="assets/img/portrait-red.webp" alt="Milad Amini in red light" width="1254" height="1254">
       </div>
     </section>
 
@@ -153,35 +162,67 @@
     </section>
   </main>
 
-  <!-- FOOTER (art-yakushev style) -->
+  <!-- FOOTER (art-yakushev style): a dancing colour field sits behind everything,
+       showing through the SM–26 mark, then the closing screen repeats the hero -->
   <footer class="foot" id="contact">
-    <div class="foot__main">
-      <div class="foot__mark" aria-label="Studio Milad">
-        <span class="foot__sm"><span class="ch--flip">S</span>M</span>
-        <span class="foot__year">–26</span>
+    <div class="foot__bg" aria-hidden="true"><canvas class="foot__gl"></canvas></div>
+
+    <div class="foot__panel">
+      <!-- black cover with the mark cut out (multiply), so the colour field shows through the letters -->
+      <div class="foot__cover" aria-hidden="true">
+        <p class="foot__mark"><span><span class="flip">S</span>M</span><span>–26</span></p>
       </div>
 
-      <dl class="foot__info">
-        <div><dt><em>Email</em></dt><dd><a href="#">hello@milad.studio</a></dd></div>
-        <div class="foot__gap"><dt><em>Social</em></dt><dd><a href="#">LinkedIn</a><a href="#">Instagram</a><a href="#">Behance</a><a href="#">GitHub</a></dd></div>
-        <div class="foot__gap"><dt><em>Menu</em></dt><dd><a href="#top">Home</a><a href="#work">Work</a><a href="#about">Info</a></dd></div>
-      </dl>
+      <div class="foot__content">
+        <dl class="foot__info">
+          <div><dt><em>Email</em></dt><dd><a href="#">hello@milad.studio</a></dd></div>
+          <div class="foot__gap"><dt><em>Social</em></dt><dd><a href="#">LinkedIn</a><a href="#">Instagram</a><a href="#">Behance</a><a href="#">GitHub</a></dd></div>
+        </dl>
+        <nav class="foot__nav" aria-label="Footer">
+          <a href="#work">Work</a><a href="#about">Info</a><a href="#contact">Contact</a>
+        </nav>
+        <p class="foot__copy">©2026 All Rights Reserved</p>
+        <div class="foot__markspace" aria-hidden="true"></div>
+      </div>
     </div>
 
-    <div class="foot__legal">
-      <span>Open for freelance &amp; collaborations</span>
-      <a href="#top">Back to top ↑</a>
-      <span>©2026 All Rights Reserved</span>
-    </div>
-
-    <!-- the closing panel: gradient + name, revealed as you reach the end -->
+    <!-- closing screen: a copy of the hero -->
     <div class="foot__end">
-      <canvas class="foot__gl" aria-hidden="true"></canvas>
-      <p class="foot__name"><span>Studio</span><em>Milad</em></p>
-      <div class="foot__endbar">
-        <span>Malmö <time class="clock">--:--</time></span>
-        <span>Art Direction / UX / iOS</span>
-        <span>55.6050° N, 13.0038° E</span>
+      <div class="hero__head foot__head">
+        <div class="hh"><span class="tl"><span class="tl__in">Studio Milad</span></span></div>
+        <div class="hh"><span class="tl"><span class="tl__in">Available for projects, 2027</span></span></div>
+        <div class="hh">
+          <span class="tl"><span class="tl__in">Services</span></span>
+          <ul class="hh__list">
+            <li class="tl"><span class="tl__in">Art Direction</span></li>
+            <li class="tl"><span class="tl__in">UX &amp; Product Design</span></li>
+            <li class="tl"><span class="tl__in">iOS Development</span></li>
+            <li class="tl"><span class="tl__in">GSAP &amp; Motion</span></li>
+          </ul>
+        </div>
+        <div class="hh">
+          <span class="tl"><span class="tl__in">Based in</span></span>
+          <ul class="hh__list">
+            <li class="tl"><span class="tl__in">Malmö, Sweden</span></li>
+            <li class="tl"><span class="tl__in">Working <em>worldwide</em></span></li>
+          </ul>
+        </div>
+        <nav class="hh hh--nav" aria-label="Closing">
+          <a href="#work">Work</a><a href="#about">Info</a><a href="#contact">Contact</a>
+        </nav>
+      </div>
+
+      <p class="foot__name name" aria-label="Studio Milad">
+        <span class="name__line" data-chars>Studio</span>
+        <span class="name__line" data-chars><em>Milad</em></span>
+      </p>
+
+      <div class="hero__bar foot__bar">
+        <span class="hero__time"><span class="shuf">Malmö</span> <time class="clock">--:--</time></span>
+        <nav class="hero__social" aria-label="Social">
+          <a href="#"><span class="shuf">LinkedIn</span></a><i>/</i><a href="#"><span class="shuf">Instagram</span></a><i>/</i><a href="#"><span class="shuf">Behance</span></a>
+        </nav>
+        <a class="hero__down" href="#top"><span class="shuf">Back to top</span> ↑</a>
       </div>
     </div>
   </footer>
