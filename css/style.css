@@ -388,7 +388,10 @@ html.lenis, html.lenis body { height: auto; }
 /* all hero and closing-screen text inverts against whatever moves behind it */
 .hero > .hero__head, .hero > .wordmark, .hero > .rule, .hero > .hero__bar,
 .foot__end > .foot__head, .foot__end > .foot__name, .foot__end > .rule, .foot__end > .foot__bar,
-.topnav { mix-blend-mode: difference; }
+.topnav {
+  mix-blend-mode: difference;
+  will-change: transform;               /* own layer: Safari otherwise only blends after a repaint (e.g. on hover) */
+}
 
 .foot__panel { position: relative; }
 /* black with the mark in white, multiplied: black hides the field, white lets it through */
