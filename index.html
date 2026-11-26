@@ -6,9 +6,12 @@
   <title>Studio Milad — Art Direction, UX &amp; iOS</title>
   <meta name="description" content="Studio Milad. Milad Amini, art director, UX designer and iOS developer in Malmö.">
   <meta name="theme-color" content="#060404">
-  <link rel="stylesheet" href="css/style.css?v=16">
+  <link rel="stylesheet" href="css/style.css?v=18">
+  <link rel="stylesheet" href="css/case.css?v=1">
   <script>
     document.documentElement.classList.add('js');
+    // came here through a link on the site: no loader, just fade in (art-yakushev)
+    try { if (sessionStorage.getItem('ms-nav')) document.documentElement.classList.add('is-arriving'); } catch (e) {}
     // failsafe: if the scripts never start the intro (blocked CDN, old browser, an error),
     // drop the loader and show the page as plain HTML instead of a black screen
     setTimeout(function () {
@@ -88,12 +91,16 @@
     <!-- WORK -->
     <section class="work" id="work">
       <div class="work__head">
-        <h2 class="section-title">All<span class="paren">(<em>0</em>)</span></h2>
-        <p class="label">Selected work — in progress</p>
+        <h2 class="section-title">All<span class="paren">(<em>1</em>)</span></h2>
+        <p class="label">Selected work</p>
       </div>
-      <div class="work__empty">
-        <p class="work__empty-text">Här ska projekten finnas</p>
-      </div>
+      <a class="wk" href="work/folierakoket/">
+        <span class="wk__no">01</span>
+        <span class="wk__name">Foliera Köket</span>
+        <span class="wk__type">Brand, web &amp; configurator</span>
+        <span class="wk__year">2026</span>
+        <img class="wk__img" src="assets/img/work/folierakoket/01-hero.webp" alt="" loading="lazy">
+      </a>
     </section>
 
     <!-- SKILLS (art-yakushev style: sticky image, italic labels, lists scrolling past) -->
@@ -216,6 +223,7 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
   <script src="js/gradient.js?v=12"></script>
-  <script src="js/main.js?v=16"></script>
+  <script src="js/transition.js?v=1"></script>
+  <script src="js/main.js?v=17"></script>
 </body>
 </html>

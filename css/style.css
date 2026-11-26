@@ -606,6 +606,7 @@ html.lenis, html.lenis body { height: auto; }
 .menu-open .burger i:first-child { top: 11px; transform: rotate(45deg); }
 .menu-open .burger i:last-child { top: 11px; transform: rotate(-45deg); }
 .js.is-loading .burger { opacity: 0; pointer-events: none; }
+@media (max-width: 860px) { .burger { display: block; } }   /* after the base rule, or display: none wins */
 
 .menu {
   position: fixed;

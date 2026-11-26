@@ -101,8 +101,13 @@
     const id = a.getAttribute('href');
     if (id === '#') return;                      // no projects or profiles yet
     const target = id === '#top' ? 0 : $(id);
-    if (lenis) lenis.scrollTo(target, { duration: 1.6 });
-    else scrollTo({ top: target === 0 ? 0 : target.getBoundingClientRect().top + scrollY, behavior: 'smooth' });
+    if (target === null) return;
+    // art-yakushev: fade out, jump, fade in
+    const jump = () => {
+      if (lenis) lenis.scrollTo(target, { immediate: true, force: true });
+      else scrollTo(0, target === 0 ? 0 : target.getBoundingClientRect().top + scrollY);
+    };
+    window.pageVeil ? window.pageVeil(jump) : jump();
   });
 
   /* ---------- PHONE MENU ---------- */
@@ -146,6 +151,7 @@
     $$('.shuf .char').forEach((c) => (c.style.opacity = 1));
     $$('.skills__group li').forEach((li) => li.classList.add('is-on'));
     $('.topnav__links').style.visibility = 'visible';
+    window.pageArrive && window.pageArrive();
     return;
   }
 
@@ -179,11 +185,27 @@
     .add(startIdle);
 
   window.__introStarted = true;
-  runLoader(document.fonts ? document.fonts.ready : Promise.resolve(), () => {
+  const reveal = () => {
     root.classList.remove('is-loading');
     lenis && lenis.start();
     intro.play();
-  });
+  };
+  if (root.classList.contains('is-arriving')) {
+    // back from another page of the site: no loader; land on the linked section, then fade in
+    $$('.loader, .loader-trail').forEach((el) => el.remove());
+    (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => {
+      reveal();
+      const target = location.hash.length > 1 && $(location.hash);
+      if (target) {
+        ScrollTrigger.refresh();
+        if (lenis) lenis.scrollTo(target, { immediate: true, force: true });
+        else target.scrollIntoView();
+      }
+      window.pageArrive && window.pageArrive();
+    });
+  } else {
+    runLoader(document.fonts ? document.fonts.ready : Promise.resolve(), reveal);
+  }
 
   function startIdle() {
     gsap.to('.grain', {
@@ -298,7 +320,7 @@
   });
 
   /* ---------- WORK ---------- */
-  gsap.from('.section-title, .work__empty-text', {
+  gsap.from('.section-title, .wk', {
     y: 40, autoAlpha: 0, duration: PHI, ease: 'expo.out', stagger: 0.15,
     scrollTrigger: { trigger: '.work', start: 'top 80%' },
   });
