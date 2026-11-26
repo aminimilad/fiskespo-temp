@@ -6,8 +6,17 @@
   <title>Studio Milad — Art Direction, UX &amp; iOS</title>
   <meta name="description" content="Studio Milad. Milad Amini, art director, UX designer and iOS developer in Malmö.">
   <meta name="theme-color" content="#060404">
-  <link rel="stylesheet" href="css/style.css">
-  <script>document.documentElement.classList.add('js')</script>
+  <link rel="stylesheet" href="css/style.css?v=6">
+  <script>
+    document.documentElement.classList.add('js');
+    // failsafe: if the scripts never start the intro (blocked CDN, old browser, an error),
+    // drop the loader and show the page as plain HTML instead of a black screen
+    setTimeout(function () {
+      if (window.__introStarted) return;
+      document.documentElement.classList.remove('js', 'is-loading');
+      document.querySelectorAll('.loader, .loader-trail').forEach(function (e) { e.parentNode.removeChild(e); });
+    }, 8000);
+  </script>
 </head>
 <body>
   <!-- LOADER (same as the live coming-soon page) -->
@@ -19,12 +28,9 @@
 
   <!-- fixed nav, shows once the hero has scrolled away -->
   <nav class="topnav" aria-label="Main">
-    <a href="#top">Home</a><a href="#work">Work</a><a href="#about">Info</a><a href="#contact">Contact</a>
+    <a class="logo" href="#top" aria-label="Studio Milad"><span class="flip">S</span>M</a>
+    <span class="topnav__links"><a href="#top">Home</a><a href="#work">Work</a><a href="#about">Info</a><a href="#contact">Contact</a></span>
   </nav>
-
-  <!-- side marks, art-yakushev style: S (mirrored) left, M right -->
-  <a class="side side--l" href="#top" aria-label="Studio Milad, back to top"><span class="flip">S</span></a>
-  <span class="side side--r" aria-hidden="true">M</span>
 
   <main>
     <!-- HERO -->
@@ -33,7 +39,7 @@
 
       <!-- editorial header (Gil Huybrecht style) -->
       <header class="hero__head">
-        <div class="hh"><span class="tl"><span class="tl__in">Studio Milad</span></span></div>
+        <div class="hh"><span class="tl"><span class="tl__in"><a class="logo" href="#top" aria-label="Studio Milad"><span class="flip">S</span>M</a></span></span></div>
         <div class="hh"><span class="tl"><span class="tl__in">Available for projects, 2027</span></span></div>
         <div class="hh">
           <span class="tl"><span class="tl__in">Services</span></span>
@@ -189,7 +195,7 @@
     <!-- closing screen: a copy of the hero -->
     <div class="foot__end">
       <div class="hero__head foot__head">
-        <div class="hh"><span class="tl"><span class="tl__in">Studio Milad</span></span></div>
+        <div class="hh"><span class="tl"><span class="tl__in"><a class="logo" href="#top" aria-label="Studio Milad"><span class="flip">S</span>M</a></span></span></div>
         <div class="hh"><span class="tl"><span class="tl__in">Available for projects, 2027</span></span></div>
         <div class="hh">
           <span class="tl"><span class="tl__in">Services</span></span>
@@ -232,7 +238,7 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
-  <script src="js/gradient.js"></script>
-  <script src="js/main.js"></script>
+  <script src="js/gradient.js?v=6"></script>
+  <script src="js/main.js?v=6"></script>
 </body>
 </html>

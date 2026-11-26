@@ -5,7 +5,7 @@
   const PHI = 1.618;
 
   /* ---------- ROLLING LINKS ---------- */
-  $$('.topnav a, .hh--nav a, .hero > .hero__bar .hero__social a, .hero > .hero__bar .hero__down, .foot__info dd a, .foot__nav a').forEach((a) => {
+  $$('.topnav__links a, .hh--nav a, .hero > .hero__bar .hero__social a, .hero > .hero__bar .hero__down, .foot__info dd a, .foot__nav a').forEach((a) => {
     const t = a.textContent;
     a.innerHTML = `<span class="roll"><span data-t="${t}">${t}</span></span>`;
   });
@@ -126,9 +126,9 @@
   gsap.set(['.hero > .hero__head', '.wordmark', '.hero > .hero__bar'], { autoAlpha: 1 });
 
   if (reduce) {
+    window.__introStarted = true;
     $$('.loader, .loader-trail').forEach((el) => el.remove());
     if (heroG) heroG.state.intro = 1;
-    gsap.set('.side', { autoAlpha: 1 });
     $$('.shuf .char').forEach((c) => (c.style.opacity = 1));
     $$('.skills__group li').forEach((li) => li.classList.add('is-on'));
     return;
@@ -157,10 +157,10 @@
       stagger: 0.04,
     }, 1 / PHI ** 2)
     .from(['.hero > .hero__bar', '.hero .hh--nav'], { autoAlpha: 0, duration: 1, ease: 'sine.out' }, PHI)
-    .to('.side', { autoAlpha: 1, duration: 1, ease: 'sine.out' }, PHI)
     .add(() => $$('.hero > .hero__bar .gl').forEach((g, i) => distort(g, 0.3 + i * 0.035)), PHI)
     .add(startIdle);
 
+  window.__introStarted = true;
   runLoader(document.fonts ? document.fonts.ready : Promise.resolve(), () => {
     root.classList.remove('is-loading');
     lenis && lenis.start();
@@ -225,11 +225,20 @@
   /* ---------- ABOUT (art-yakushev, same values) ---------- */
   const mm = gsap.matchMedia();
   // the statement: letter by letter out of a blur, scrubbed
-  const titleChars = $$('.about__title .char');
-  gsap.set(titleChars, { opacity: 0, filter: 'blur(10px)' });
-  gsap.to(titleChars, {
-    opacity: 1, filter: 'blur(0px)', ease: 'power1.out', duration: 1, stagger: { amount: 0.8 },
-    scrollTrigger: { trigger: '.about__title', start: 'top 80%', end: 'bottom 20%', scrub: 0.15 },
+  // (desktop: per letter with blur, as art-yakushev; phones: per word, opacity only,
+  //  since 100+ blurred layers can make iOS Safari run out of memory and reload)
+  mm.add('(min-width: 861px) and (hover: hover)', () => {
+    const titleChars = $$('.about__title .char');
+    gsap.fromTo(titleChars, { opacity: 0, filter: 'blur(10px)' }, {
+      opacity: 1, filter: 'blur(0px)', ease: 'power1.out', duration: 1, stagger: { amount: 0.8 },
+      scrollTrigger: { trigger: '.about__title', start: 'top 80%', end: 'bottom 20%', scrub: 0.15 },
+    });
+  });
+  mm.add('(max-width: 860px), (hover: none)', () => {
+    gsap.fromTo($$('.about__title .word'), { opacity: 0.08 }, {
+      opacity: 1, ease: 'none', stagger: { amount: 0.8 },
+      scrollTrigger: { trigger: '.about__title', start: 'top 85%', end: 'bottom 45%', scrub: 0.15 },
+    });
   });
   mm.add('(min-width: 861px)', () => {
     // info: out of a heavy blur
@@ -243,8 +252,8 @@
       .to('.about__img', { y: () => innerHeight * 0.22, ease: 'none' }, '<');
   });
   mm.add('(max-width: 860px)', () => {
-    gsap.fromTo('.about__info', { filter: 'blur(20px)', opacity: 0 }, {
-      filter: 'blur(0px)', opacity: 1, ease: 'power1.out',
+    gsap.fromTo('.about__info', { y: 40, opacity: 0 }, {
+      y: 0, opacity: 1, ease: 'power1.out',
       scrollTrigger: { trigger: '.about__info', start: 'top 100%', end: 'top 75%', scrub: true },
     });
     gsap.to('.about__img', {

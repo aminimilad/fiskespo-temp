@@ -87,7 +87,10 @@ html.lenis, html.lenis body { height: auto; }
 .topnav {
   position: fixed;
   top: var(--s3);
+  left: var(--gut);
   right: var(--gut);
+  justify-content: space-between;
+  align-items: center;
   z-index: 30;
   display: flex;
   gap: var(--s3);
@@ -100,6 +103,7 @@ html.lenis, html.lenis body { height: auto; }
   transform: translateY(-8px);
   transition: opacity 0.5s var(--curve), transform 0.5s var(--curve);
 }
+.topnav__links { display: flex; gap: var(--s3); }
 .topnav.is-on { opacity: 1; pointer-events: auto; transform: none; }
 
 /* ---------------- HERO ---------------- */
@@ -167,21 +171,15 @@ html.lenis, html.lenis body { height: auto; }
 .ch { display: inline-block; will-change: transform; }
 .flip { display: inline-block; transform: scaleX(-1); }
 
-/* side marks (A / ® on art-yakushev): mirrored S left, M right */
-.side {
-  position: fixed;
-  top: 50%;
-  z-index: 30;
-  translate: 0 -50%;
+/* logo: SM with a mirrored S */
+.logo {
+  display: inline-block;
   font-weight: 700;
-  font-size: clamp(26px, 2.3vw, 40px);
-  line-height: 1;
-  letter-spacing: -0.04em;
-  color: #fff;
+  font-size: 1.5em;
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+  white-space: nowrap;
 }
-.side--l { left: clamp(14px, 1.1vw, 20px); }
-.side--r { right: clamp(14px, 1.1vw, 20px); }
-.js .side { opacity: 0; }
 
 .hero__bar {
   display: grid;
@@ -498,7 +496,8 @@ html.lenis, html.lenis body { height: auto; }
 
 /* ---------------- SMALL SCREENS ---------------- */
 @media (max-width: 860px) {
-  .topnav { gap: var(--s2); font-size: 12px; }
+  .topnav { font-size: 12px; }
+  .topnav__links { gap: var(--s2); }
   .hero__head { grid-template-columns: 1fr 1fr; row-gap: var(--s3); }
   .hero__head .hh:nth-child(2), .hero__head .hh:nth-child(4) { display: none; }
   .hh--nav { grid-column: 1 / -1; order: -1; justify-content: flex-end; }
@@ -512,6 +511,7 @@ html.lenis, html.lenis body { height: auto; }
   /* about: statement, info, then the photo */
   .about { padding: var(--s6) var(--gut) var(--s6); }
   .about__title { font-size: 9.4vw; line-height: 1.06; }
+  .about__title > span { display: inline; }
   .about__t2 { padding-left: 0; }
   .about__info { grid-template-columns: 1fr; row-gap: var(--s3); margin-top: var(--s5); font-size: 17px; }
   .about__label, .about__copy { grid-column: 1; }
