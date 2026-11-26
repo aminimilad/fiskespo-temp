@@ -421,6 +421,7 @@ html.lenis, html.lenis body { height: auto; }
   display: flex;
   flex-direction: column;
   padding: var(--s3) var(--gut) 0;
+  overflow: hidden;                     /* the letters start below the screen: never let them make the page taller */
 }
 .foot__name { margin-top: auto; }
 .foot__bar .hero__down { white-space: nowrap; }
