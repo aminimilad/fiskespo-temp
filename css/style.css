@@ -111,7 +111,9 @@ html.lenis, html.lenis body { height: auto; }
 }
 .topnav.is-on { pointer-events: auto; }
 .topnav.is-on .logo { opacity: 1; }
-.hero__nav { visibility: hidden; }
+/* never shown: the intro's autoAlpha on the bar's children would make it visible, and two white
+   copies blending (difference) cancel out into outlines */
+.hero__nav { visibility: hidden !important; opacity: 0 !important; }
 .hero__nav > span { display: inline-block; height: 1.15em; line-height: 1.15; }   /* same box as the rolling links */
 .topnav.is-away .topnav__links { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.5s var(--curve), visibility 0s 0.5s; }
 .js .topnav__links { visibility: hidden; }

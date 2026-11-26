@@ -172,7 +172,7 @@
       duration: PHI,
       stagger: 0.04,
     }, 1 / PHI ** 2)
-    .from(['.hero > .hero__bar > *', '.topnav__links a'], { autoAlpha: 0, duration: 1, ease: 'sine.out' }, PHI)
+    .from(['.hero > .hero__bar > :not(.hero__nav)', '.topnav__links a'], { autoAlpha: 0, duration: 1, ease: 'sine.out' }, PHI)
     .set('.topnav__links', { visibility: 'visible' }, PHI)
     .fromTo('.hero > .rule', { scaleX: 0 }, { scaleX: 1, duration: 1.4, ease: 'expo.inOut' }, PHI + 0.2)
     .add(() => $$('.hero > .hero__bar .gl').forEach((g, i) => distort(g, 0.3 + i * 0.035)), PHI)
