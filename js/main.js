@@ -123,7 +123,9 @@
   const chars = $$('.hero .name .char');
   // mirrored glyphs keep their mirror while GSAP owns the transform
   $$('.name .char.flip').forEach((c) => gsap.set(c, { scaleX: -1 }));
-  gsap.set(['.hero > .hero__head', '.wordmark', '.hero > .hero__bar'], { autoAlpha: 1 });
+  gsap.set(['.hero > .hero__head', '.wordmark', '.hero > .hero__bar', '.hero > .rule'], { autoAlpha: 1 });
+  // phones get art-yakushev's mobile intro: whole lines rise instead of single letters
+  const phone = matchMedia('(max-width: 860px)').matches;
 
   if (reduce) {
     window.__introStarted = true;
@@ -141,13 +143,14 @@
   root.classList.add('is-loading');
   const intro = gsap.timeline({ paused: true, defaults: { ease: 'expo.out' } });
   if (heroG) intro.to(heroG.state, { intro: 1, duration: PHI, ease: 'power2.out' }, 0);
+  if (phone) intro.from('.hero .name .word', { yPercent: 130, duration: 1.8, stagger: { each: 0.12 }, ease: 'expo.inOut' }, 0.2);
+  else intro.from(chars, {
+    yPercent: 105,
+    filter: 'blur(10px)',
+    duration: PHI,
+    stagger: { each: 0.1 / PHI, from: 'center' },
+  }, 1 / PHI);
   intro
-    .from(chars, {
-      yPercent: 105,
-      filter: 'blur(10px)',
-      duration: PHI,
-      stagger: { each: 0.1 / PHI, from: 'center' },
-    }, 1 / PHI)
     .from('.hero .tl__in', {
       yPercent: 110,
       rotate: 6,
@@ -156,7 +159,8 @@
       duration: PHI,
       stagger: 0.04,
     }, 1 / PHI ** 2)
-    .from(['.hero > .hero__bar', '.hero .hh--nav'], { autoAlpha: 0, duration: 1, ease: 'sine.out' }, PHI)
+    .from(['.hero > .hero__bar > *', '.hero .hh--nav a'], { autoAlpha: 0, duration: 1, ease: 'sine.out' }, PHI)
+    .fromTo('.hero > .rule', { scaleX: 0 }, { scaleX: 1, duration: 1.4, ease: 'expo.inOut' }, PHI + 0.2)
     .add(() => $$('.hero > .hero__bar .gl').forEach((g, i) => distort(g, 0.3 + i * 0.035)), PHI)
     .add(startIdle);
 
@@ -210,8 +214,8 @@
 
   /* ---------- HERO OUT ---------- */
   // everything in the hero leaves together (no overlap with the bar), the gradient stays
-  gsap.to(['.hero > .hero__head', '.wordmark', '.hero > .hero__bar'], {
-    yPercent: -18, autoAlpha: 0, ease: 'none',
+  gsap.fromTo(['.hero > .hero__head', '.wordmark', '.hero > .rule', '.hero > .hero__bar'], { yPercent: 0, autoAlpha: 1 }, {
+    yPercent: -18, autoAlpha: 0, ease: 'none', immediateRender: false,
     scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true },
   });
   // the fixed nav takes over once the hero's own nav is gone
@@ -313,7 +317,10 @@
   const endChars = $$('.foot__name .char');
   const end = gsap.timeline({ paused: true });
   end
-    .from(endChars, { yPercent: 150, duration: 1.5, ease: 'expo.inOut', stagger: { from: 'center', each: 0.03 } }, 0)
+    .from(phone ? $$('.foot__name .word') : endChars, phone
+      ? { yPercent: 130, duration: 1.8, delay: 0.2, ease: 'expo.inOut', stagger: { each: 0.12 } }
+      : { yPercent: 150, duration: 1.5, ease: 'expo.inOut', stagger: { from: 'center', each: 0.03 } }, 0)
+    .fromTo('.foot__end .rule', { scaleX: 0 }, { scaleX: 1, duration: 1.4, ease: 'expo.inOut', immediateRender: true }, 1.3)
     .from('.foot__head .tl__in', {
       yPercent: 110, rotate: 6, transformOrigin: '0% 100%', filter: 'blur(8px)',
       duration: PHI, ease: 'expo.out', stagger: 0.04,

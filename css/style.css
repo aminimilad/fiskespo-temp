@@ -172,13 +172,16 @@ html.lenis, html.lenis body { height: auto; }
 .flip { display: inline-block; transform: scaleX(-1); }
 
 /* logo: SM with a mirrored S */
-.logo {
-  display: inline-block;
-  font-weight: 700;
-  font-size: 1.5em;
-  line-height: 0.8;
-  letter-spacing: -0.05em;
-  white-space: nowrap;
+.logo { display: inline-block; line-height: 0; }
+.logo svg { display: block; height: 1.04em; width: auto; fill: currentColor; overflow: visible; }
+
+/* hairline between STUDIO MILAD and the bar; drawn left to right at the end of the intro */
+.rule {
+  display: block;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.45;
+  transform-origin: 0 50%;
 }
 
 .hero__bar {
@@ -370,21 +373,16 @@ html.lenis, html.lenis body { height: auto; }
   display: flex;
   align-items: flex-end;
   padding: 0 var(--gut) var(--s4);
-  background: #000;
-  color: #fff;
-  mix-blend-mode: multiply;
-  border-top: 1px solid #000;
+  overflow: hidden;
 }
+/* the svg is a huge black sheet with the letters cut out (no blend modes, works in every browser) */
 .foot__mark {
-  display: flex;
-  flex-direction: column;
-  font-weight: 500;
-  font-size: var(--mk);
-  line-height: 0.8;
-  letter-spacing: -0.04em;
-  white-space: nowrap;
+  display: block;
+  width: calc(var(--mk) * 1.604);
+  height: auto;
+  overflow: visible;
+  fill: #000;
 }
-.foot__mark > span + span { margin-top: 0.06em; }
 
 .foot__content {
   position: relative;
@@ -492,7 +490,7 @@ html.lenis, html.lenis body { height: auto; }
 }
 
 
-.js .hero > .hero__head, .js .wordmark, .js .hero > .hero__bar { visibility: hidden; }
+.js .hero > .hero__head, .js .wordmark, .js .hero > .hero__bar, .js .hero > .rule { visibility: hidden; }
 
 /* ---------------- SMALL SCREENS ---------------- */
 @media (max-width: 860px) {
