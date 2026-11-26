@@ -288,18 +288,21 @@
   });
 
   /* ---------- FOOTER ---------- */
-  // now and then a portrait drifts through the colour field, blurred, then dissolves again
-  const ghosts = $$('.foot__ghost');
+  // portraits drift through the colour field, blurred: the red one first, the moment the footer
+  // comes into view (held for 3 s), then the silhouette, then they keep taking turns
+  const ghosts = $$('.foot__ghost');            // [red, silhouette]
   let ghostN = 0;
-  (function ghost() {
-    gsap.delayedCall(gsap.utils.random(5, 10), () => {
+  function ghost(delay) {
+    gsap.delayedCall(delay, () => {
+      const first = ghostN === 0;
       const g = ghosts[ghostN++ % ghosts.length];
-      gsap.timeline({ onComplete: ghost })
-        .fromTo(g, { autoAlpha: 0, scale: 1.18, xPercent: gsap.utils.random(-6, 6) },
-          { autoAlpha: g.classList.contains('foot__ghost--sil') ? 0.5 : 0.9, scale: 1.04, xPercent: 0, duration: 2.6, ease: 'sine.inOut' })
-        .to(g, { autoAlpha: 0, scale: 1, duration: 2.4, ease: 'sine.inOut' }, '+=1.6');
+      gsap.timeline({ onComplete: () => ghost(gsap.utils.random(0.8, 1.8)) })
+        .fromTo(g, { autoAlpha: 0, scale: 1.14, xPercent: gsap.utils.random(-5, 5) },
+          { autoAlpha: g.classList.contains('foot__ghost--sil') ? 0.5 : 0.9, scale: 1.04, xPercent: 0, duration: 1.2, ease: 'sine.out' })
+        .to(g, { autoAlpha: 0, scale: 1, duration: 1.2, ease: 'sine.in' }, first ? '+=3' : '+=1.2');
     });
-  })();
+  }
+  ScrollTrigger.create({ trigger: '.foot', start: 'top 85%', once: true, onEnter: () => ghost(0) });
 
   gsap.from('.foot__info > div, .foot__nav, .foot__copy', {
     y: 24, autoAlpha: 0, filter: 'blur(8px)', duration: 1.2, ease: 'expo.out', stagger: 0.08,

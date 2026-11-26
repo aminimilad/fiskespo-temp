@@ -378,11 +378,10 @@ html.lenis, html.lenis body { height: auto; }
   object-position: 50% 35%;
   filter: blur(24px) saturate(1.2);
 }
-.foot__ghost--sil img {                             /* the whole head and shoulders, centred, edges fading out */
-  object-fit: contain;
-  object-position: 50% 100%;
-  -webkit-mask-image: radial-gradient(26% 52% at 50% 56%, #000 60%, transparent);
-          mask-image: radial-gradient(26% 52% at 50% 56%, #000 60%, transparent);
+.foot__ghost--sil img {                             /* full width, head and shoulders in frame, top and bottom fading out */
+  object-position: 50% 28%;
+  -webkit-mask-image: linear-gradient(transparent, #000 18%, #000 82%, transparent);
+          mask-image: linear-gradient(transparent, #000 18%, #000 82%, transparent);
 }
 .foot__ghost { mix-blend-mode: screen; }               /* the red portrait lights the field; the silhouette reads as backlit */
 
