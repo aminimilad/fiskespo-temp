@@ -161,7 +161,7 @@ html.lenis, html.lenis body { height: auto; }
 }
 .name__line {
   display: block;
-  clip-path: inset(-0.1em -50vw -0.12em);   /* letters rise from below, never clipped at the sides */
+  clip-path: inset(-0.1em -50vw 0);   /* letters rise from below the line (fully hidden there), never clipped at the sides */
   padding: 0.04em 0.02em 0.1em;
 }
 .name em { font-size: 1.06em; letter-spacing: -0.025em; }

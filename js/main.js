@@ -143,16 +143,16 @@
   root.classList.add('is-loading');
   const intro = gsap.timeline({ paused: true, defaults: { ease: 'expo.out' } });
   if (heroG) intro.to(heroG.state, { intro: 1, duration: PHI, ease: 'power2.out' }, 0);
-  if (phone) intro.from('.hero .name .word', { yPercent: 130, duration: 1.8, stagger: { each: 0.12 }, ease: 'expo.inOut' }, 0.2);
+  if (phone) intro.from('.hero .name .word', { yPercent: 150, duration: 1.8, stagger: { each: 0.12 }, ease: 'expo.inOut' }, 0.2);
   else intro.from(chars, {
-    yPercent: 105,
+    yPercent: 150,
     filter: 'blur(10px)',
     duration: PHI,
     stagger: { each: 0.1 / PHI, from: 'center' },
   }, 1 / PHI);
   intro
     .from('.hero .tl__in', {
-      yPercent: 110,
+      yPercent: 110, autoAlpha: 0,
       rotate: 6,
       transformOrigin: '0% 100%',
       filter: 'blur(8px)',
@@ -318,11 +318,11 @@
   const end = gsap.timeline({ paused: true });
   end
     .from(phone ? $$('.foot__name .word') : endChars, phone
-      ? { yPercent: 130, duration: 1.8, delay: 0.2, ease: 'expo.inOut', stagger: { each: 0.12 } }
+      ? { yPercent: 150, duration: 1.8, delay: 0.2, ease: 'expo.inOut', stagger: { each: 0.12 } }
       : { yPercent: 150, duration: 1.5, ease: 'expo.inOut', stagger: { from: 'center', each: 0.03 } }, 0)
     .fromTo('.foot__end .rule', { scaleX: 0 }, { scaleX: 1, duration: 1.4, ease: 'expo.inOut', immediateRender: true }, 1.3)
     .from('.foot__head .tl__in', {
-      yPercent: 110, rotate: 6, transformOrigin: '0% 100%', filter: 'blur(8px)',
+      yPercent: 110, autoAlpha: 0, rotate: 6, transformOrigin: '0% 100%', filter: 'blur(8px)',
       duration: PHI, ease: 'expo.out', stagger: 0.04,
     }, 0.2)
     .from('.foot__head .hh--nav', { autoAlpha: 0, duration: 1, ease: 'sine.out' }, 0.8)
