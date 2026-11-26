@@ -320,10 +320,60 @@
   });
 
   /* ---------- WORK ---------- */
-  gsap.from('.section-title, .wk', {
+  gsap.from('.section-title, .wl__item', {
     y: 40, autoAlpha: 0, duration: PHI, ease: 'expo.out', stagger: 0.15,
     scrollTrigger: { trigger: '.work', start: 'top 80%' },
   });
+
+  // the list (luke-baffait): the title nearest the middle of the screen lights up and fills the preview;
+  // the others slide right by their distance from the middle
+  const wlItems = $$('.wl__item');
+  const card = $('.wl__card');
+  if (card && !phone) {
+    const cover = $('.wl__cover', card);
+    const date = $('.wl__date', card);
+    const pushX = wlItems.map((it) => gsap.quickTo(it, 'x', { duration: 0.6, ease: 'power2.out' }));
+    let cur = -1;
+    const activate = (i) => {
+      if (i === cur) return;
+      if (cur >= 0) wlItems[cur].classList.remove('is-on');
+      const first = cur === -1;
+      cur = i;
+      if (i < 0) { gsap.to(card, { opacity: 0, duration: 0.25, ease: 'power2.in' }); return; }
+      wlItems[i].classList.add('is-on');
+      const fill = () => { cover.src = wlItems[i].dataset.img; date.textContent = wlItems[i].dataset.date; card.href = wlItems[i].getAttribute('href'); };
+      if (first) { fill(); gsap.to(card, { opacity: 1, duration: 0.4, ease: 'power2.out' }); }
+      else gsap.to(card, { opacity: 0, duration: 0.18, ease: 'power2.in', onComplete: () => { fill(); gsap.to(card, { opacity: 1, duration: 0.3, ease: 'power2.out' }); } });
+    };
+    const onScroll = () => {
+      const cy = innerHeight / 2;
+      let best = -1, bestD = Infinity;
+      wlItems.forEach((it, i) => {
+        const r = it.getBoundingClientRect();
+        const d = Math.abs(r.top + r.height / 2 - cy);
+        pushX[i](Math.min(d / cy, 1) * 80);
+        if (d < bestD) { bestD = d; best = i; }
+      });
+      activate(bestD < innerHeight * 0.45 ? best : -1);
+    };
+    if (lenis) lenis.on('scroll', onScroll); else addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // tilt the card with the mouse, and a "See project" pill follows the cursor over it
+    const pill = $('.wl__cursor');
+    const px = gsap.quickTo(pill, 'left', { duration: 0.35, ease: 'power3.out' });
+    const py = gsap.quickTo(pill, 'top', { duration: 0.35, ease: 'power3.out' });
+    const ry = gsap.quickTo(card, 'rotationY', { duration: 0.8, ease: 'power3.out' });
+    const rx = gsap.quickTo(card, 'rotationX', { duration: 0.8, ease: 'power3.out' });
+    card.addEventListener('pointerenter', () => pill.classList.add('is-on'));
+    card.addEventListener('pointerleave', () => { pill.classList.remove('is-on'); rx(0); ry(0); });
+    card.addEventListener('pointermove', (e) => {
+      px(e.clientX); py(e.clientY);
+      const r = card.getBoundingClientRect();
+      ry(((e.clientX - r.left) / r.width - 0.5) * 16);
+      rx(-((e.clientY - r.top) / r.height - 0.5) * 16);
+    });
+  }
 
   /* ---------- SKILLS ---------- */
   // the big title comes out of a blur as you scroll to it

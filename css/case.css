@@ -152,52 +152,87 @@
   .case__stack img { display: block; width: 100%; height: auto; }
 }
 
-/* ---------------- WORK LIST (front page) ---------------- */
-.wk {
-  position: relative;
+/* ---------------- WORK LIST (front page, luke-baffait) ----------------
+   Left: the titles, dim, the one in the middle of the screen bright and the others pushed right by their
+   distance from it. Right: a sticky preview card (date, "Preview", cover) that tilts with the mouse. */
+.wl {
   display: grid;
-  grid-template-columns: 3em 1fr auto 5em;
-  align-items: baseline;
-  column-gap: var(--s3);
-  padding: var(--s4) 0;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
 }
-.wk__no, .wk__type, .wk__year { font-size: clamp(14px, 1.1vw, 18px); text-transform: uppercase; letter-spacing: 0.02em; color: var(--mute); }
-.wk__year { text-align: right; }
-.wk__name {
-  font-size: clamp(44px, 7vw, 132px);
-  line-height: 0.9;
-  letter-spacing: -0.055em;
+.wl__list {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.wl__item {
+  width: 100%;
+  padding: 0.5em 0;
+  border-bottom: 1px solid rgba(242, 239, 233, 0.08);
+  font-size: clamp(32px, 4vw, 64px);
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+  color: rgba(242, 239, 233, 0.2);
+  transition: color 0.5s ease;
+  will-change: transform;
+}
+.wl__item:first-child { border-top: 1px solid rgba(242, 239, 233, 0.08); }
+.wl__item.is-on { color: var(--fg); }
+.wl__preview {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 800px;
+}
+.wl__card {
+  display: block;
+  width: min(30vw, 440px);
+  opacity: 0;
+  cursor: none;
+  will-change: transform;
+  transform-style: preserve-3d;
+}
+.wl__meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+  font-size: 12px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  transition: transform 0.8s var(--curve);
+  color: var(--mute);
 }
-.wk__img {
-  position: absolute;
-  top: 50%;
-  right: 18%;
-  width: clamp(220px, 26vw, 460px);
-  aspect-ratio: 16 / 10;
-  object-fit: cover;
+.wl__cover { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; }
+.wl__cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 60;
+  padding: 1em 1.6em;
+  border-radius: 50px;
+  background: var(--fg);
+  color: var(--bg);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
   pointer-events: none;
   opacity: 0;
-  transform: translate3d(0, -40%, 0) scale(0.92);
-  clip-path: inset(18% 18% 18% 18%);
-  transition: opacity 0.6s var(--curve), transform 0.9s var(--curve), clip-path 0.9s var(--curve);
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease;
 }
-.wk:hover .wk__img { opacity: 1; transform: translate3d(0, -50%, 0); clip-path: inset(0); }
-.wk:hover .wk__name { transform: translateX(0.12em); }
+.wl__cursor.is-on { opacity: 1; }
 @media (max-width: 860px) {
-  .wk { grid-template-columns: 2.2em 1fr auto; row-gap: var(--s2); }
-  .wk__type { display: none; }
-  .wk__img {
-    position: static;
-    grid-column: 1 / -1;
-    width: 100%;
-    opacity: 1;
-    transform: none;
-    clip-path: none;
-  }
+  .wl { display: block; min-height: 0; }
+  .wl__list { position: relative; height: auto; }
+  .wl__item { white-space: normal; font-size: clamp(28px, 8vw, 40px); color: var(--fg); }
+  .wl__preview, .wl__cursor { display: none; }
 }
 
 /* ---------------- PAGE TRANSITION (art-yakushev: fade out, fade in) ---------------- */

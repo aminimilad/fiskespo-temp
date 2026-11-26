@@ -7,7 +7,7 @@
   <meta name="description" content="Studio Milad. Milad Amini, art director, UX designer and iOS developer in Malmö.">
   <meta name="theme-color" content="#060404">
   <link rel="stylesheet" href="css/style.css?v=18">
-  <link rel="stylesheet" href="css/case.css?v=1">
+  <link rel="stylesheet" href="css/case.css?v=2">
   <script>
     document.documentElement.classList.add('js');
     // came here through a link on the site: no loader, just fade in (art-yakushev)
@@ -94,13 +94,20 @@
         <h2 class="section-title">All<span class="paren">(<em>1</em>)</span></h2>
         <p class="label">Selected work</p>
       </div>
-      <a class="wk" href="work/folierakoket/">
-        <span class="wk__no">01</span>
-        <span class="wk__name">Foliera Köket</span>
-        <span class="wk__type">Brand, web &amp; configurator</span>
-        <span class="wk__year">2026</span>
-        <img class="wk__img" src="assets/img/work/folierakoket/01-hero.webp" alt="" loading="lazy">
-      </a>
+      <!-- luke-baffait: titles on the left (the one in the middle of the screen lights up),
+           a preview card on the right that follows the active one -->
+      <div class="wl">
+        <div class="wl__list">
+          <a class="wl__item" href="work/folierakoket/" data-img="assets/img/work/folierakoket/01-hero.webp" data-date="11 2026">Foliera Köket</a>
+        </div>
+        <div class="wl__preview" aria-hidden="true">
+          <a class="wl__card" href="work/folierakoket/" tabindex="-1">
+            <span class="wl__meta"><span class="wl__date">11 2026</span><span>Preview</span></span>
+            <img class="wl__cover" src="assets/img/work/folierakoket/01-hero.webp" alt="">
+          </a>
+        </div>
+      </div>
+      <div class="wl__cursor" aria-hidden="true">See project</div>
     </section>
 
     <!-- SKILLS (art-yakushev style: sticky image, italic labels, lists scrolling past) -->
@@ -224,6 +231,6 @@
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
   <script src="js/gradient.js?v=12"></script>
   <script src="js/transition.js?v=1"></script>
-  <script src="js/main.js?v=17"></script>
+  <script src="js/main.js?v=18"></script>
 </body>
 </html>
