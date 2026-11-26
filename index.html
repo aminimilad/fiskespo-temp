@@ -6,7 +6,7 @@
   <title>Studio Milad — Art Direction, UX &amp; iOS</title>
   <meta name="description" content="Studio Milad. Milad Amini, art director, UX designer and iOS developer in Malmö.">
   <meta name="theme-color" content="#060404">
-  <link rel="stylesheet" href="css/style.css?v=9">
+  <link rel="stylesheet" href="css/style.css?v=10">
   <script>
     document.documentElement.classList.add('js');
     // failsafe: if the scripts never start the intro (blocked CDN, old browser, an error),
@@ -172,7 +172,12 @@
   <!-- FOOTER (art-yakushev style): a dancing colour field sits behind everything,
        showing through the SM–26 mark, then the closing screen repeats the hero -->
   <footer class="foot" id="contact">
-    <div class="foot__bg" aria-hidden="true"><canvas class="foot__gl"></canvas></div>
+    <div class="foot__bg" aria-hidden="true">
+      <canvas class="foot__gl"></canvas>
+      <!-- now and then one of these drifts through the field, blurred -->
+      <div class="foot__ghost"><img src="assets/img/ghost-red.webp" alt="" width="800" height="800" loading="lazy"></div>
+      <div class="foot__ghost foot__ghost--sil"><img src="assets/img/ghost-silhouette.webp" alt="" width="800" height="1022" loading="lazy"></div>
+    </div>
 
     <div class="foot__panel">
       <!-- black cover with the mark cut out (multiply), so the colour field shows through the letters -->
@@ -241,7 +246,7 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
-  <script src="js/gradient.js?v=9"></script>
-  <script src="js/main.js?v=9"></script>
+  <script src="js/gradient.js?v=10"></script>
+  <script src="js/main.js?v=10"></script>
 </body>
 </html>

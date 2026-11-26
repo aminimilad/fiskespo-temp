@@ -112,7 +112,7 @@
   gsap.ticker.add(() => {
     const s = reduce ? 0 : (performance.now() - t0) / 1000;
     heroG && heroG.render(s);
-    footG && footG.render(s + 12);
+    footG && footG.render(s * 1.8 + 12);     // the footer field dances faster than the hero
   });
   const movers = [heroG].filter(Boolean).map((g) => ({
     x: gsap.quickTo(g.state, 'mouseX', { duration: 2.2, ease: 'power3.out' }),
@@ -288,6 +288,19 @@
   });
 
   /* ---------- FOOTER ---------- */
+  // now and then a portrait drifts through the colour field, blurred, then dissolves again
+  const ghosts = $$('.foot__ghost');
+  let ghostN = 0;
+  (function ghost() {
+    gsap.delayedCall(gsap.utils.random(5, 10), () => {
+      const g = ghosts[ghostN++ % ghosts.length];
+      gsap.timeline({ onComplete: ghost })
+        .fromTo(g, { autoAlpha: 0, scale: 1.18, xPercent: gsap.utils.random(-6, 6) },
+          { autoAlpha: g.classList.contains('foot__ghost--sil') ? 0.5 : 0.9, scale: 1.04, xPercent: 0, duration: 2.6, ease: 'sine.inOut' })
+        .to(g, { autoAlpha: 0, scale: 1, duration: 2.4, ease: 'sine.inOut' }, '+=1.6');
+    });
+  })();
+
   gsap.from('.foot__info > div, .foot__nav, .foot__copy', {
     y: 24, autoAlpha: 0, filter: 'blur(8px)', duration: 1.2, ease: 'expo.out', stagger: 0.08,
     scrollTrigger: { trigger: '.foot__content', start: 'top 85%' },
