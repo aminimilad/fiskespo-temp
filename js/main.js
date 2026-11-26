@@ -105,6 +105,18 @@
     else scrollTo({ top: target === 0 ? 0 : target.getBoundingClientRect().top + scrollY, behavior: 'smooth' });
   });
 
+  /* ---------- PHONE MENU ---------- */
+  const burger = $('.burger');
+  const setMenu = (open) => {
+    root.classList.toggle('menu-open', open);
+    burger.setAttribute('aria-expanded', open);
+    if (lenis) open ? lenis.stop() : lenis.start();
+  };
+  burger.addEventListener('click', () => setMenu(!root.classList.contains('menu-open')));
+  // closes before the anchor handler above scrolls (this listener is nearer the link)
+  $('.menu').addEventListener('click', (e) => { if (e.target.closest('a')) setMenu(false); });
+  addEventListener('keydown', (e) => { if (e.key === 'Escape') setMenu(false); });
+
   /* ---------- GRADIENTS ---------- */
   const heroG = window.createGradient($('.hero__gl'), { scale: 0.5 });
   const footG = window.createDance($('.foot__gl'), { scale: 0.22 });
@@ -133,6 +145,7 @@
     if (heroG) heroG.state.intro = 1;
     $$('.shuf .char').forEach((c) => (c.style.opacity = 1));
     $$('.skills__group li').forEach((li) => li.classList.add('is-on'));
+    $('.topnav__links').style.visibility = 'visible';
     return;
   }
 
@@ -159,7 +172,8 @@
       duration: PHI,
       stagger: 0.04,
     }, 1 / PHI ** 2)
-    .from(['.hero > .hero__bar > *', '.hero .hh--nav a'], { autoAlpha: 0, duration: 1, ease: 'sine.out' }, PHI)
+    .from(['.hero > .hero__bar > *', '.topnav__links a'], { autoAlpha: 0, duration: 1, ease: 'sine.out' }, PHI)
+    .set('.topnav__links', { visibility: 'visible' }, PHI)
     .fromTo('.hero > .rule', { scaleX: 0 }, { scaleX: 1, duration: 1.4, ease: 'expo.inOut' }, PHI + 0.2)
     .add(() => $$('.hero > .hero__bar .gl').forEach((g, i) => distort(g, 0.3 + i * 0.035)), PHI)
     .add(startIdle);
@@ -214,16 +228,33 @@
 
   /* ---------- HERO OUT ---------- */
   // everything in the hero leaves together (no overlap with the bar), the gradient stays
-  gsap.fromTo(['.hero > .hero__head', '.wordmark', '.hero > .rule', '.hero > .hero__bar'], { yPercent: 0, autoAlpha: 1 }, {
+  // (the menu stays: it scrolls up with the page until the top of the screen catches it)
+  gsap.fromTo(['.hero > .hero__head', '.wordmark', '.hero > .rule', '.hero > .hero__bar > :not(.hero__nav)'], { yPercent: 0, autoAlpha: 1 }, {
     yPercent: -18, autoAlpha: 0, ease: 'none', immediateRender: false,
     scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true },
   });
-  // the fixed nav takes over once the hero's own nav is gone
+  // the menu (art-yakushev): one element. It starts under the line, scrolls up with the page,
+  // and stays at the top of the screen once it gets there; scrolled back, it goes back down
+  const navLinks = $('.topnav__links');
+  const navSpot = $('.hero__nav');
+  let navRest = 0;
+  const measureNav = () => {
+    navRest = navSpot.getBoundingClientRect().top + scrollY - navLinks.parentNode.getBoundingClientRect().top;
+  };
+  ScrollTrigger.addEventListener('refreshInit', () => gsap.set(navLinks, { y: 0 }));
+  ScrollTrigger.addEventListener('refresh', measureNav);
+  measureNav();
+  gsap.ticker.add(() => gsap.set(navLinks, { y: Math.max(0, navRest - scrollY) }));
+  // the logo comes in once the hero has gone
   ScrollTrigger.create({
     trigger: '.hero', start: 'bottom 20%',
-    // ...and steps aside again on the closing screen, which has its own copy of the hero nav
     onToggle: (self) => $('.topnav').classList.toggle('is-on', self.isActive),
     endTrigger: '.foot__end', end: 'top 40%',
+  });
+  // both step aside on the closing screen, which has its own copy of the hero nav
+  ScrollTrigger.create({
+    trigger: '.foot__end', start: 'top 40%',
+    onToggle: (self) => $('.topnav').classList.toggle('is-away', self.isActive),
   });
 
   /* ---------- ABOUT (art-yakushev, same values) ---------- */

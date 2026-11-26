@@ -86,11 +86,12 @@ html.lenis, html.lenis body { height: auto; }
 /* ---------------- TOP NAV ---------------- */
 .topnav {
   position: fixed;
-  top: var(--s3);
+  top: var(--gut);
   left: var(--gut);
   right: var(--gut);
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
+  line-height: 1;
   z-index: 30;
   display: flex;
   gap: var(--s3);
@@ -98,13 +99,22 @@ html.lenis, html.lenis body { height: auto; }
   letter-spacing: 0.01em;
   text-transform: uppercase;
   color: #fff;
-  opacity: 0;
   pointer-events: none;
-  transform: translateY(-8px);
-  transition: opacity 0.5s var(--curve), transform 0.5s var(--curve);
 }
-.topnav__links { display: flex; gap: var(--s3); }
-.topnav.is-on { opacity: 1; pointer-events: auto; transform: none; }
+.topnav .logo { opacity: 0; transition: opacity 0.5s var(--curve); }
+.topnav__links {
+  display: flex;
+  gap: var(--s3);
+  pointer-events: auto;
+  will-change: transform;
+  transition: opacity 0.5s var(--curve), visibility 0s;
+}
+.topnav.is-on { pointer-events: auto; }
+.topnav.is-on .logo { opacity: 1; }
+.hero__nav { visibility: hidden; }
+.hero__nav > span { display: inline-block; height: 1.15em; line-height: 1.15; }   /* same box as the rolling links */
+.topnav.is-away .topnav__links { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.5s var(--curve), visibility 0s 0.5s; }
+.js .topnav__links { visibility: hidden; }
 
 /* ---------------- HERO ---------------- */
 .hero {
@@ -115,7 +125,7 @@ html.lenis, html.lenis body { height: auto; }
   isolation: isolate;
   display: flex;
   flex-direction: column;
-  padding: var(--s3) var(--gut) 0;
+  padding: var(--gut) var(--gut) 0;
   background: var(--bg);
 }
 .hero__gl {
@@ -126,10 +136,11 @@ html.lenis, html.lenis body { height: auto; }
   z-index: -1;
   display: block;
 }
-/* editorial header, Gil Huybrecht style: sentence case, columns, indented lists */
+/* clean header: the logo on the left, the menu top right (art-yakushev) */
 .hero__head {
-  display: grid;
-  grid-template-columns: 1.1fr 1.3fr 1.4fr 1.2fr auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   gap: var(--s3);
   font-size: clamp(16px, 1.32vw, 22px);
   line-height: 1.25;
@@ -173,7 +184,7 @@ html.lenis, html.lenis body { height: auto; }
 
 /* logo: SM with a mirrored S */
 .logo { display: inline-block; line-height: 0; }
-.logo svg { display: block; height: 1.04em; width: auto; fill: currentColor; overflow: visible; }
+.logo svg { display: block; height: 1.45em; width: auto; fill: currentColor; overflow: visible; }
 
 /* hairline between STUDIO MILAD and the bar; drawn left to right at the end of the intro */
 .rule {
@@ -188,14 +199,15 @@ html.lenis, html.lenis body { height: auto; }
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  padding: var(--s2) 0 var(--s3);
+  padding: var(--s3) 0;
   font-size: clamp(15px, 1.32vw, 22px);
+  line-height: 1;
   text-transform: uppercase;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
 }
 .hero__social { display: flex; gap: var(--s2); }
 .hero__social i { font-style: normal; opacity: 0.4; }
-.hero__down { justify-self: end; }
+.hero__down, .hero__nav { justify-self: end; }
 .gl { display: inline-block; white-space: pre; }
 
 /* ---------------- ABOUT (art-yakushev) ---------------- */
@@ -296,7 +308,7 @@ html.lenis, html.lenis body { height: auto; }
     var(--bg);
 }
 .skills__intro { text-align: center; }
-.skills__kicker { font-size: 15px; color: var(--fg); }
+.skills__kicker { font-size: 18px; text-transform: uppercase; letter-spacing: 0.02em; color: var(--fg); }
 .skills__kicker em { color: var(--mute); }
 .skills__title {
   margin-top: var(--s3);
@@ -447,7 +459,7 @@ html.lenis, html.lenis body { height: auto; }
   min-height: 560px;
   display: flex;
   flex-direction: column;
-  padding: var(--s3) var(--gut) 0;
+  padding: var(--gut) var(--gut) 0;
   overflow: hidden;                     /* the letters start below the screen: never let them make the page taller */
 }
 .foot__name { margin-top: auto; }
@@ -522,11 +534,9 @@ html.lenis, html.lenis body { height: auto; }
 
 /* ---------------- SMALL SCREENS ---------------- */
 @media (max-width: 860px) {
-  .topnav { font-size: 12px; }
-  .topnav__links { gap: var(--s2); }
-  .hero__head { grid-template-columns: 1fr 1fr; row-gap: var(--s3); }
-  .hero__head .hh:nth-child(2), .hero__head .hh:nth-child(4) { display: none; }
-  .hh--nav { grid-column: 1 / -1; order: -1; justify-content: flex-end; }
+  .topnav { font-size: 16px; }
+  .topnav__links, .hh--nav { display: none; }
+  .burger { display: block; }
   .hero__bar { grid-template-columns: 1fr auto; }
   .hero__social { display: none; }
 
@@ -563,6 +573,60 @@ html.lenis, html.lenis body { height: auto; }
   .foot__markspace { display: block; height: calc(var(--mk) * 1.66); }
   .foot__end .hero__bar { grid-template-columns: 1fr auto; }
 }
+
+/* ---------------- PHONE MENU (art-yakushev: burger top right, full-screen links) ---------------- */
+.burger {
+  display: none;
+  position: fixed;
+  top: var(--gut);
+  right: var(--gut);
+  z-index: 40;
+  width: 30px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #fff;
+  cursor: pointer;
+  mix-blend-mode: difference;
+  transition: opacity 0.6s var(--curve);
+}
+.burger i {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background: currentColor;
+  transition: transform 0.6s var(--curve), top 0.6s var(--curve);
+}
+.burger i:first-child { top: 7px; }
+.burger i:last-child { top: 16px; }
+.menu-open .burger i:first-child { top: 11px; transform: rotate(45deg); }
+.menu-open .burger i:last-child { top: 11px; transform: rotate(-45deg); }
+.js.is-loading .burger { opacity: 0; pointer-events: none; }
+
+.menu {
+  position: fixed;
+  inset: 0;
+  z-index: 35;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: var(--gut) var(--gut) var(--s5);
+  background: var(--bg);
+  font-size: 15vw;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.6s var(--curve), visibility 0s 0.6s;
+}
+.menu a { width: fit-content; transform: translateY(30%); transition: transform 0.8s var(--curve); }
+.menu-open .menu { visibility: visible; opacity: 1; transition: opacity 0.6s var(--curve); }
+.menu-open .menu a { transform: none; }
+.menu-open, .menu-open body { overflow: hidden; }
 
 @media (prefers-reduced-motion: reduce) {
   .grain { display: none; }

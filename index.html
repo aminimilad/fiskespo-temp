@@ -6,7 +6,7 @@
   <title>Studio Milad — Art Direction, UX &amp; iOS</title>
   <meta name="description" content="Studio Milad. Milad Amini, art director, UX designer and iOS developer in Malmö.">
   <meta name="theme-color" content="#060404">
-  <link rel="stylesheet" href="css/style.css?v=12">
+  <link rel="stylesheet" href="css/style.css?v=15">
   <script>
     document.documentElement.classList.add('js');
     // failsafe: if the scripts never start the intro (blocked CDN, old browser, an error),
@@ -29,7 +29,13 @@
   <!-- fixed nav, shows once the hero has scrolled away -->
   <nav class="topnav" aria-label="Main">
     <a class="logo" href="#top" aria-label="Studio Milad"><svg viewBox="-17 -728 1397 744" aria-hidden="true"><path d="M260 16L260 16Q401 16 480 -48Q558 -112 559 -235L559 -235L452 -235Q449 -75 258 -75L258 -75Q179 -75 137 -105Q94 -136 94 -194L94 -194Q94 -241 129 -266Q164 -292 255 -312L255 -312L316 -325Q426 -347 482 -397Q538 -447 538 -535Q538 -623 470 -675Q402 -728 286 -728L286 -728Q146 -728 76 -668Q5 -608 3 -503L3 -503L109 -503Q114 -572 155 -604Q195 -637 285 -637L285 -637Q355 -637 392 -611Q429 -585 429 -537L429 -537Q429 -488 396 -463L396 -463Q363 -436 274 -417L274 -417L212 -404Q90 -378 37 -329Q-17 -280 -17 -197L-17 -197Q-17 -98 57 -41Q130 16 260 16ZM1090 -343L1090 -343L1231 -712L1380 -712L1380 0L1277 0L1277 -223Q1277 -464 1281 -584L1281 -584Q1260 -520 1221 -419L1221 -419L1060 0L970 0L807 -419Q774 -507 748 -581L748 -581Q752 -462 752 -223L752 -223L752 0L649 0L649 -712L797 -712L943 -333Q988 -215 1016 -132L1016 -132Q1049 -231 1090 -343Z"/></svg></a>
-    <span class="topnav__links"><a href="#top">Home</a><a href="#work">Work</a><a href="#about">Info</a><a href="#contact">Contact</a></span>
+    <span class="topnav__links"><a href="#work">Work</a><a href="#about">Info</a><a href="#contact">Contact</a></span>
+  </nav>
+
+  <!-- phone menu (art-yakushev style): burger top right, full-screen links -->
+  <button class="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="menu"><i></i><i></i></button>
+  <nav class="menu" id="menu" aria-label="Menu">
+    <a href="#top">Home</a><a href="#work">Work</a><a href="#about">Info</a><a href="#contact">Contact</a>
   </nav>
 
   <main>
@@ -40,26 +46,6 @@
       <!-- editorial header (Gil Huybrecht style) -->
       <header class="hero__head">
         <div class="hh"><span class="tl"><span class="tl__in"><a class="logo" href="#top" aria-label="Studio Milad"><svg viewBox="-17 -728 1397 744" aria-hidden="true"><path d="M260 16L260 16Q401 16 480 -48Q558 -112 559 -235L559 -235L452 -235Q449 -75 258 -75L258 -75Q179 -75 137 -105Q94 -136 94 -194L94 -194Q94 -241 129 -266Q164 -292 255 -312L255 -312L316 -325Q426 -347 482 -397Q538 -447 538 -535Q538 -623 470 -675Q402 -728 286 -728L286 -728Q146 -728 76 -668Q5 -608 3 -503L3 -503L109 -503Q114 -572 155 -604Q195 -637 285 -637L285 -637Q355 -637 392 -611Q429 -585 429 -537L429 -537Q429 -488 396 -463L396 -463Q363 -436 274 -417L274 -417L212 -404Q90 -378 37 -329Q-17 -280 -17 -197L-17 -197Q-17 -98 57 -41Q130 16 260 16ZM1090 -343L1090 -343L1231 -712L1380 -712L1380 0L1277 0L1277 -223Q1277 -464 1281 -584L1281 -584Q1260 -520 1221 -419L1221 -419L1060 0L970 0L807 -419Q774 -507 748 -581L748 -581Q752 -462 752 -223L752 -223L752 0L649 0L649 -712L797 -712L943 -333Q988 -215 1016 -132L1016 -132Q1049 -231 1090 -343Z"/></svg></a></span></span></div>
-        <div class="hh"><span class="tl"><span class="tl__in">Available for projects, 2027</span></span></div>
-        <div class="hh">
-          <span class="tl"><span class="tl__in">Services</span></span>
-          <ul class="hh__list">
-            <li class="tl"><span class="tl__in">Art Direction</span></li>
-            <li class="tl"><span class="tl__in">UX &amp; Product Design</span></li>
-            <li class="tl"><span class="tl__in">iOS Development</span></li>
-            <li class="tl"><span class="tl__in">GSAP &amp; Motion</span></li>
-          </ul>
-        </div>
-        <div class="hh">
-          <span class="tl"><span class="tl__in">Based in</span></span>
-          <ul class="hh__list">
-            <li class="tl"><span class="tl__in">Malmö, Sweden</span></li>
-            <li class="tl"><span class="tl__in">Working <em>worldwide</em></span></li>
-          </ul>
-        </div>
-        <nav class="hh hh--nav" aria-label="Main">
-          <a href="#work">Work</a><a href="#about">Info</a><a href="#contact">Contact</a>
-        </nav>
       </header>
 
       <h1 class="wordmark name" aria-label="Studio Milad">
@@ -70,10 +56,10 @@
       <i class="rule" aria-hidden="true"></i>
       <div class="hero__bar">
         <span class="hero__time"><span class="glitch">MALMÖ</span> <time class="clock glitch">--:--</time></span>
-        <nav class="hero__social" aria-label="Social">
-          <a href="#">LinkedIn</a><i>/</i><a href="#">Instagram</a><i>/</i><a href="#">Behance</a>
-        </nav>
-        <a class="hero__down" href="#about">Scroll ↓</a>
+        <span class="hero__avail glitch">Available for work 2026</span>
+        <!-- holds the menu's place under the line; the real menu is .topnav__links, which scrolls up from here
+             and then stays at the top of the screen (art-yakushev) -->
+        <span class="hh--nav hero__nav" aria-hidden="true"><span>Work</span><span>Info</span><span>Contact</span></span>
       </div>
     </section>
 
@@ -203,23 +189,6 @@
     <div class="foot__end">
       <div class="hero__head foot__head">
         <div class="hh"><span class="tl"><span class="tl__in"><a class="logo" href="#top" aria-label="Studio Milad"><svg viewBox="-17 -728 1397 744" aria-hidden="true"><path d="M260 16L260 16Q401 16 480 -48Q558 -112 559 -235L559 -235L452 -235Q449 -75 258 -75L258 -75Q179 -75 137 -105Q94 -136 94 -194L94 -194Q94 -241 129 -266Q164 -292 255 -312L255 -312L316 -325Q426 -347 482 -397Q538 -447 538 -535Q538 -623 470 -675Q402 -728 286 -728L286 -728Q146 -728 76 -668Q5 -608 3 -503L3 -503L109 -503Q114 -572 155 -604Q195 -637 285 -637L285 -637Q355 -637 392 -611Q429 -585 429 -537L429 -537Q429 -488 396 -463L396 -463Q363 -436 274 -417L274 -417L212 -404Q90 -378 37 -329Q-17 -280 -17 -197L-17 -197Q-17 -98 57 -41Q130 16 260 16ZM1090 -343L1090 -343L1231 -712L1380 -712L1380 0L1277 0L1277 -223Q1277 -464 1281 -584L1281 -584Q1260 -520 1221 -419L1221 -419L1060 0L970 0L807 -419Q774 -507 748 -581L748 -581Q752 -462 752 -223L752 -223L752 0L649 0L649 -712L797 -712L943 -333Q988 -215 1016 -132L1016 -132Q1049 -231 1090 -343Z"/></svg></a></span></span></div>
-        <div class="hh"><span class="tl"><span class="tl__in">Available for projects, 2027</span></span></div>
-        <div class="hh">
-          <span class="tl"><span class="tl__in">Services</span></span>
-          <ul class="hh__list">
-            <li class="tl"><span class="tl__in">Art Direction</span></li>
-            <li class="tl"><span class="tl__in">UX &amp; Product Design</span></li>
-            <li class="tl"><span class="tl__in">iOS Development</span></li>
-            <li class="tl"><span class="tl__in">GSAP &amp; Motion</span></li>
-          </ul>
-        </div>
-        <div class="hh">
-          <span class="tl"><span class="tl__in">Based in</span></span>
-          <ul class="hh__list">
-            <li class="tl"><span class="tl__in">Malmö, Sweden</span></li>
-            <li class="tl"><span class="tl__in">Working <em>worldwide</em></span></li>
-          </ul>
-        </div>
         <nav class="hh hh--nav" aria-label="Closing">
           <a href="#work">Work</a><a href="#about">Info</a><a href="#contact">Contact</a>
         </nav>
@@ -247,6 +216,6 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
   <script src="js/gradient.js?v=12"></script>
-  <script src="js/main.js?v=12"></script>
+  <script src="js/main.js?v=15"></script>
 </body>
 </html>
