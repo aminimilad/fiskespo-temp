@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Gry — Studio Milad</title>
+  <meta name="description" content="Gry Ljusklinik: concept identity and website for a Stockholm light-therapy clinic. Studio Milad, 2026.">
+  <meta name="theme-color" content="#060404">
+  <link rel="stylesheet" href="../../css/style.css?v=20">
+  <link rel="stylesheet" href="../../css/case.css?v=6">
+  <script>
+    // a reload always starts at the top: no restored scroll position, no jump to a #section
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    try {
+      var nav = performance.getEntriesByType('navigation')[0];
+      if (nav && nav.type === 'reload' && location.hash) history.replaceState(null, '', location.pathname + location.search);
+    } catch (e) {}
+    // came here through a link on the site: start under the veil and fade in (art-yakushev)
+    try { if (sessionStorage.getItem('ms-nav')) document.documentElement.classList.add('is-arriving'); } catch (e) {}
+  </script>
+</head>
+<body class="page-case">
+  <nav class="topnav is-on" aria-label="Main">
+    <a class="logo" href="../../" aria-label="Studio Milad"><svg viewBox="-17 -728 1397 744" aria-hidden="true"><path d="M260 16L260 16Q401 16 480 -48Q558 -112 559 -235L559 -235L452 -235Q449 -75 258 -75L258 -75Q179 -75 137 -105Q94 -136 94 -194L94 -194Q94 -241 129 -266Q164 -292 255 -312L255 -312L316 -325Q426 -347 482 -397Q538 -447 538 -535Q538 -623 470 -675Q402 -728 286 -728L286 -728Q146 -728 76 -668Q5 -608 3 -503L3 -503L109 -503Q114 -572 155 -604Q195 -637 285 -637L285 -637Q355 -637 392 -611Q429 -585 429 -537L429 -537Q429 -488 396 -463L396 -463Q363 -436 274 -417L274 -417L212 -404Q90 -378 37 -329Q-17 -280 -17 -197L-17 -197Q-17 -98 57 -41Q130 16 260 16ZM1090 -343L1090 -343L1231 -712L1380 -712L1380 0L1277 0L1277 -223Q1277 -464 1281 -584L1281 -584Q1260 -520 1221 -419L1221 -419L1060 0L970 0L807 -419Q774 -507 748 -581L748 -581Q752 -462 752 -223L752 -223L752 0L649 0L649 -712L797 -712L943 -333Q988 -215 1016 -132L1016 -132Q1049 -231 1090 -343Z"/></svg></a>
+    <span class="topnav__links"><a href="../../#work">Work</a><a href="../../#about">Info</a><a href="../../#contact">Contact</a></span>
+  </nav>
+  <button class="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="menu"><i></i><i></i></button>
+  <nav class="menu" id="menu" aria-label="Menu">
+    <a href="../../">Home</a><a href="../../#work">Work</a><a href="../../#about">Info</a><a href="../../#contact">Contact</a>
+  </nav>
+
+  <main class="case">
+    <!-- info (luke-baffait: title + year, text, tags, visit) -->
+    <section class="case__info">
+      <a class="case__back" href="../../#work">↖ Back</a>
+
+      <h1 class="case__title"><span class="case__mask"><span>Gry</span></span><sup class="case__year">2026</sup></h1>
+      <p class="case__lede">Mornings come back. A concept identity and website for a Stockholm light-therapy clinic that helps people through the dark months, one morning at a time.</p>
+
+      <dl class="case__meta">
+        <div><dt>Client</dt><dd>Gry Ljusklinik (concept)</dd></div>
+        <div><dt>Role</dt><dd>Art Direction, Identity, UX &amp; Web Design</dd></div>
+        <div><dt>Type</dt><dd>Self-initiated, 2026</dd></div>
+        <div><dt>Images</dt><dd>All drawn in code, no photos</dd></div>
+      </dl>
+
+      <div class="case__story">
+        <div class="case__part">
+          <h2 class="case__label">(The <em>problem</em>)</h2>
+          <p>Clinics for winter depression and sleep usually look like hospitals: blue logos, stock photos of smiling people and long lists of symptoms. For someone who can barely get out of bed in December, that is one more grey room.</p>
+        </div>
+        <div class="case__part">
+          <h2 class="case__label">(The <em>idea</em>)</h2>
+          <p>Gry is Swedish for dawn. The whole identity is one red sun that rises slowly: blurred and sprayed at first, sharper every week, until it is a clean half circle. It works like the treatment does. Nothing happens overnight, but each morning is a little clearer than the last.</p>
+        </div>
+        <div class="case__part">
+          <h2 class="case__label">(The <em>solution</em>)</h2>
+          <p>A calm site in warm paper, one red and one grotesk. The front page is a single sun on the horizon with a few scattered words. The programme page stacks the four weeks as four suns going from haze to sharp. Booking is a calendar of sunrises: every day shows when the sun comes up, and you book a morning, not an appointment. A daylight chart of Stockholm explains the season in one picture. Every sun, grain and chart is drawn in code, and every page was designed for the phone too.</p>
+        </div>
+      </div>
+
+      <p class="case__visit case__visit--note">Concept project</p>
+    </section>
+
+    <!-- gallery (luke-baffait: thumbnails scroll past, the one in the middle grows and fills the big frame) -->
+    <section class="case__gallery" aria-label="Images">
+      <div class="case__thumbs"><div class="case__thumbs-in">
+        <button type="button" aria-label="Front page"><img src="../../assets/img/work/gry/01-home.webp?v=1" alt=""></button>
+        <button type="button" aria-label="Programme"><img src="../../assets/img/work/gry/02-programme.webp?v=1" alt=""></button>
+        <button type="button" aria-label="Booking"><img src="../../assets/img/work/gry/03-booking.webp?v=1" alt=""></button>
+        <button type="button" aria-label="Clinic"><img src="../../assets/img/work/gry/04-clinic.webp?v=1" alt=""></button>
+        <button type="button" aria-label="Phones"><img src="../../assets/img/work/gry/05-phones.webp?v=1" alt=""></button>
+      </div></div>
+      <figure class="case__sel">
+        <img src="../../assets/img/work/gry/01-home.webp?v=1" alt="Gry front page: Mornings come back, over a blurred red sun rising">
+        <img src="../../assets/img/work/gry/01-home.webp?v=1" alt="" aria-hidden="true">
+      </figure>
+      <!-- phones: the images one after another -->
+      <div class="case__stack">
+        <img src="../../assets/img/work/gry/01-home.webp?v=1" alt="Front page" loading="lazy">
+        <img src="../../assets/img/work/gry/02-programme.webp?v=1" alt="Programme: four weeks as four suns" loading="lazy">
+        <img src="../../assets/img/work/gry/03-booking.webp?v=1" alt="Booking: a calendar of sunrises" loading="lazy">
+        <img src="../../assets/img/work/gry/04-clinic.webp?v=1" alt="Clinic: daylight in Stockholm over a year" loading="lazy">
+        <img src="../../assets/img/work/gry/05-phones.webp?v=1" alt="The site on phones" loading="lazy">
+      </div>
+    </section>
+  </main>
+
+  <div class="grain" aria-hidden="true"></div>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="../../js/transition.js?v=1"></script>
+  <script src="../../js/case.js?v=1"></script>
+</body>
+</html>
