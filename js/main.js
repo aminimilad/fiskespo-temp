@@ -151,6 +151,7 @@
     $$('.shuf .char').forEach((c) => (c.style.opacity = 1));
     $$('.skills__group li').forEach((li) => li.classList.add('is-on'));
     $('.topnav__links').style.visibility = 'visible';
+    $('.topnav .logo').style.visibility = 'visible';
     window.pageArrive && window.pageArrive();
     return;
   }
@@ -177,6 +178,9 @@
       filter: 'blur(8px)',
       duration: PHI,
       stagger: 0.04,
+    }, 1 / PHI ** 2)
+    .from('.topnav .logo', {
+      yPercent: 110, autoAlpha: 0, rotate: 6, transformOrigin: '0% 100%', filter: 'blur(8px)', duration: PHI,
     }, 1 / PHI ** 2)
     .from(['.hero > .hero__bar > :not(.hero__nav)', '.topnav__links a'], { autoAlpha: 0, duration: 1, ease: 'sine.out' }, PHI)
     .set('.topnav__links', { visibility: 'visible' }, PHI)

@@ -227,7 +227,7 @@
 .wl__cursor.is-on { opacity: 1; }
 @media (max-width: 860px) {
   .wl { display: block; min-height: 0; }
-  .wl__list { position: relative; height: auto; }
+  .wl__list { position: relative; height: auto; padding: 0; }
   .wl__item { white-space: normal; font-size: clamp(28px, 8vw, 40px); color: var(--fg); }
   .wl__preview, .wl__cursor { display: none; }
 }
