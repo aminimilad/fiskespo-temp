@@ -9,6 +9,12 @@
   <link rel="stylesheet" href="../../css/style.css?v=18">
   <link rel="stylesheet" href="../../css/case.css?v=5">
   <script>
+    // a reload always starts at the top: no restored scroll position, no jump to a #section
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    try {
+      var nav = performance.getEntriesByType('navigation')[0];
+      if (nav && nav.type === 'reload' && location.hash) history.replaceState(null, '', location.pathname + location.search);
+    } catch (e) {}
     // came here through a link on the site: start under the veil and fade in (art-yakushev)
     try { if (sessionStorage.getItem('ms-nav')) document.documentElement.classList.add('is-arriving'); } catch (e) {}
   </script>
